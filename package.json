@@ -1,0 +1,16 @@
+{
+  "name": "mc_server_controller",
+  "version": "1.0.0",
+  "description": "Enables to boot Minecraft servers from Discord!",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "haiiro2gou",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1"
+  }
+}
