@@ -1,0 +1,10 @@
+{
+    "files.eol": "\n",
+    "githubIssues.ignoreCompletionTrigger": [
+        "javascript"
+    ],
+    "git.branchProtection": [
+        "master"
+    ],
+    "git.branchProtectionPrompt": "alwaysPrompt",
+}
