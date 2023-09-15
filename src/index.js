@@ -13,7 +13,7 @@ import getServerStatus from './utils/getServerStatus.js';
 cron.schedule('*/15 * * * * *', async () => {
     console.log('Started pinging to the server!');
 
-    // proxy
+    // proxy (ngrok)
     try {
         const response = await got({ url: 'http://127.0.0.1:4040/api/tunnels/' });
         const proxyAddress = (JSON.parse(response.body).tunnels[0].public_url).substring(6);
@@ -23,7 +23,6 @@ cron.schedule('*/15 * * * * *', async () => {
     }
 
     // hub
-    
 
     // temporary
 
