@@ -15,7 +15,7 @@ cron.schedule('*/15 * * * * *', async () => {
 
     // proxy
     try {
-        const response = await got('http://127.0.0.1:4040/api/tunnels/');
+        const response = await got({ url: 'http://127.0.0.1:4040/api/tunnels/' });
         const proxyAddress = (JSON.parse(response.body).tunnels[0].public_url).substring(6);
         getServerStatus(proxyAddress);
     } catch (error) {
