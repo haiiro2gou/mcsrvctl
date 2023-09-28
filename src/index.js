@@ -12,36 +12,59 @@ import getServerStatus from './utils/getServerStatus.js';
 
 cron.schedule('*/15 * * * * *', async () => {
     console.log('Started pinging to the server!');
-    var result = [true, true, true, true];
 
     // proxy (ngrok)
     try {
-        const proxyResponse = await got({ url: 'http://127.0.0.1:4040/api/tunnels/' });
+        const proxyResponse = await got({ url: `http://${process.env.SELF_IP}:4040/api/tunnels/` });
         const proxyParse = (JSON.parse(proxyResponse.body).tunnels[0].public_url).substring(6).split(':', 2);
         const proxyAddress = proxyParse[0], proxyPort = Number(proxyParse[1]);
-        result[0] = getServerStatus(proxyAddress, proxyPort);
+        const proxyResult = await getServerStatus(proxyAddress, proxyPort);
+
+        if (proxyResult.check) {
+            console.log(`The proxy server is online!`);
+        } else {
+            console.log(`The proxy server is offline...`);
+        }
     } catch (error) {
         console.log(`Error has occured during getting response from the proxy: ${error}`);
     }
 
     // hub
     try {
-        const hubAddress = '127.0.0.1', hubPort = process.env.SERV_HUB;
-        result[1] = getServerStatus(hubAddress, hubPort);
+        const hubAddress = process.env.SELF_IP, hubPort = Number(process.env.SERV_HUB);
+        const hubResult = await getServerStatus(hubAddress, hubPort);
+
+        if (hubResult.check) {
+            console.log(`The hub server is online!`);
+        } else {
+            console.log(`The hub server is offline...`);
+        }
     } catch (error) {
         console.log(`Error has occured during getting response from the hub server: ${error}`);
     }
     // temporary
     try {
-        const tempAddress = '192.168.2.121', tempPort = process.env.SERV_TEMP;
-        result[2] = getServerStatus(tempAddress, tempPort);
+        const tempAddress = process.env.HUB_IP, tempPort = Number(process.env.SERV_TEMP);
+        const tempResult = await getServerStatus(tempAddress, tempPort);
+        
+        if (tempResult.check) {
+            console.log(`The temporary server is online!`);
+        } else {
+            console.log(`The temporary server is offline...`);
+        }
     } catch (error) {
         console.log(`Error has occured during getting response from the temporary server: ${error}`);
     }
     // event
     try {
-        const eventAddress = '192.168.2.121', eventPort = process.env.SERV_EVENT;
-        result[3] = getServerStatus(eventAddress, eventPort);
+        const eventAddress = process.env.HUB_IP, eventPort = Number(process.env.SERV_EVENT);
+        const eventResult = await getServerStatus(eventAddress, eventPort);
+        
+        if (eventResult.check) {
+            console.log(`The event server is online!`);
+        } else {
+            console.log(`The event server is offline...`);
+        }
     } catch (error) {
         console.log(`Error has occured during getting response from the event server: ${error}`);
     }
