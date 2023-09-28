@@ -1,14 +1,14 @@
 import got from 'got';
+import util from 'minecraft-server-util';
+const options = {
+    timeout: 1000 * 5,
+    enableSRV: true
+};
 
-export default async (ipAddress) => {
-    const response = await got({
-        url: 'https://api.mcsrvstat.us/3/' + encodeURIComponent(ipAddress),
-    });
-    const servData = JSON.parse(response.body);
-    if (servData.online) {
-        console.log('The proxy is online!');
-    } else {
-        console.log('The proxy is offline...');
+export default async (addr, port) => {
+    try {
+        const result = await util.status(addr, port, options);
+    } catch (error) {
+        console.log(`Error has occurred during getting server status: ${error}`);
     }
-    return servData.online;
 };

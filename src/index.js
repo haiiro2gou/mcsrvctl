@@ -16,8 +16,9 @@ cron.schedule('*/15 * * * * *', async () => {
     // proxy (ngrok)
     try {
         const response = await got({ url: 'http://127.0.0.1:4040/api/tunnels/' });
-        const proxyAddress = (JSON.parse(response.body).tunnels[0].public_url).substring(6);
-        getServerStatus(proxyAddress);
+        const proxyAddress = (JSON.parse(response.body).tunnels[0].public_url).substring(6).split(':', 2);
+        console.log(`${proxyAddress[0]}`);
+        getServerStatus(proxyAddress[0], proxyAddress[1]);
     } catch (error) {
         console.log(`Error has occured during getting response from the proxy: ${error}`);
     }
