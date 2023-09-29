@@ -9,6 +9,7 @@ eventHandler(client);
 import cron from 'node-cron';
 import got from 'got';
 import getServerStatus from './utils/getServerStatus.js';
+import modifyMessages from './utils/modifyMessages.js';
 const servData = class {
     constructor(_check, _result) {
         this.check = _check;
@@ -52,7 +53,7 @@ cron.schedule('*/15 * * * * *', async () => {
     }
 
     // modify message
-
+    await modifyMessages(result);
 });
 
 client.login(process.env.DISCORD_TOKEN);
