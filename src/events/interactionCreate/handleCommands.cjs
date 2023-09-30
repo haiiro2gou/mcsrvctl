@@ -1,5 +1,6 @@
 module.exports = (client, interaction) => { }; const { devs, testServer } = require('../../../config.json');
 const getLocalCommands = require('../../utils/getLocalCommands.cjs');
+const getTime = require('../../utils/getTime.cjs');
 
 module.exports = async (client, interaction) => {
     if (!interaction.isChatInputCommand()) return;
@@ -49,6 +50,6 @@ module.exports = async (client, interaction) => {
 
         await commandObject.callback(client, interaction);
     } catch (error) {
-        console.log(`Error has occurred during running the command:\n ${error}`);
+        console.log(`${getTime(new Date())}Error has occurred during running the command:\n ${error}`);
     }
 };

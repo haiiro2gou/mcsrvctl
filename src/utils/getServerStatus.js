@@ -1,4 +1,5 @@
 import util from 'minecraft-server-util';
+import getTime from './getTime.cjs';
 const options = {
     timeout: 1000 * 2,
     enableSRV: true
@@ -18,7 +19,7 @@ export default async (addr, port) => {
         ret.data.ip = `${addr}:${port}`;
         ret.check = true;
     } catch (error) {
-        console.log(`${error} (${addr}:${port})`);
+        console.log(`${getTime(new Date())}${error} (${addr}:${port})`);
         ret.check = false;
     }
     return ret;
