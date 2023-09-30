@@ -13,14 +13,14 @@ const servData = class {
 export default async function eventFunction(client) {
     setInterval(async () => {
         console.log(`${getTime(new Date())} Started pinging to the server!`);
-        let result = new servData(5);
+        let result = new servData(4);
     
         try {
             const proxyResponse = await got({ url: `http://${process.env.SELF_IP}:4040/api/tunnels/` });
             const proxyParse = (JSON.parse(proxyResponse.body).tunnels[0].public_url).substring(6).split(':', 2);
             const proxyAddress = proxyParse[0], proxyPort = Number(proxyParse[1]);
             result[0] = await getServerStatus(proxyAddress, proxyPort);
-        } catch (error) {}
+        } catch (error) { result[0] = { check: false, data: {} }; }
         try {
             const hubAddress = process.env.SELF_IP, hubPort = Number(process.env.PORT_HUB);
             result[1] = await getServerStatus(hubAddress, hubPort);
