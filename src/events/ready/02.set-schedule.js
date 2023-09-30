@@ -35,5 +35,5 @@ export default async function eventFunction(client) {
         } catch (error) {}
     
         modifyMessages(result);
-    }, 15000);
+    }, 60000);
 };
