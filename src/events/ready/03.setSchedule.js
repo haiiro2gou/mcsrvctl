@@ -1,7 +1,7 @@
 import got from 'got';
-import getServerStatus from './../../utils/getServerStatus.js';
+import getServerStatus from '../../utils/getServerStatus.js';
 import getTime from '../../utils/getTime.cjs';
-import modifyMessages from './../../utils/modifyMessages.js';
+import modifyMessages from '../../utils/modifyMessages.js';
 
 const servData = class {
     constructor(_check, _result) {
