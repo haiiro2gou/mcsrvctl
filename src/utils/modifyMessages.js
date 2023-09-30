@@ -28,7 +28,7 @@ export default async (input) => {
             channel.send({ content: `${title + proxy + hub + temp + event + time}` });
         }
     } catch (error) {
-        console.log(`${getTime(new Date())}Error has occurred during modifying server status log.\n${error}`);
+        console.log(`${getTime(new Date())} Error has occurred during modifying server status log.\n${error}`);
     }
 }
 

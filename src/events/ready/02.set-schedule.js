@@ -12,7 +12,7 @@ const servData = class {
 
 export default async function eventFunction(client) {
     setInterval(async () => {
-        console.log(`${getTime(new Date())}Started pinging to the server!`);
+        console.log(`${getTime(new Date())} Started pinging to the server!`);
         let result = new servData(5);
     
         try {

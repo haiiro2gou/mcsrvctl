@@ -1,3 +1,5 @@
+const getTime = require('../../utils/getTime.cjs');
+
 module.exports = {
     name: 'ping',
     description: 'Pong!',
@@ -13,5 +15,8 @@ module.exports = {
 
         const ping = reply.createdTimestamp - interaction.createdTimestamp;
         interaction.editReply(`Pong! (${ping} ms)`);
+
+        const doer = await client.users.fetch(interaction.member.id);
+        console.log(`${getTime(new Date())} Ping from ${doer.username}!`);
     },
 };

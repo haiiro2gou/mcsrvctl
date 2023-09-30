@@ -19,7 +19,7 @@ export default async (addr, port) => {
         ret.data.ip = `${addr}:${port}`;
         ret.check = true;
     } catch (error) {
-        console.log(`${getTime(new Date())}${error} (${addr}:${port})`);
+        console.log(`${getTime(new Date())} ${error} (${addr}:${port})`);
         ret.check = false;
     }
     return ret;

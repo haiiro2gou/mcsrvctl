@@ -22,7 +22,7 @@ module.exports = async (client) => {
             if (existingCommand) {
                 if (localCommand.deleted) {
                     await applicationCommands.delete(existingCommand.id);
-                    console.log(`${getTime(new Date())}Deleted command: ${name}`);
+                    console.log(`${getTime(new Date())} Deleted command: ${name}`);
                     continue;
                 }
 
@@ -32,11 +32,11 @@ module.exports = async (client) => {
                         options,
                     });
 
-                    console.log(`${getTime(new Date())}Edited command: ${name}`);
+                    console.log(`${getTime(new Date())} Edited command: ${name}`);
                 }
             } else {
                 if (localCommand.deleted) {
-                    console.log(`${getTime(new Date())}Skipped registering command because of deleted: ${name}`);
+                    console.log(`${getTime(new Date())} Skipped registering command because of deleted: ${name}`);
                     continue;
                 }
 
@@ -46,10 +46,10 @@ module.exports = async (client) => {
                     options,
                 });
 
-                console.log(`${getTime(new Date())}Registered command: ${name}`);
+                console.log(`${getTime(new Date())} Registered command: ${name}`);
             }
         }
     } catch (error) {
-        console.log(`${getTime(new Date())}Error has occurred during deploying local commands:\n ${error}`);
+        console.log(`${getTime(new Date())} Error has occurred during deploying local commands:\n ${error}`);
     }
 };
