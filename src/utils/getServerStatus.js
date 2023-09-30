@@ -15,6 +15,7 @@ export default async (addr, port) => {
     var ret = new servData;
     try {
         ret.data = await util.status(addr, port, options);
+        ret.data.ip = `${addr}:${port}`;
         ret.check = true;
     } catch (error) {
         console.log(`Error has occurred during getting server status.\n${error}`);

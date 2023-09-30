@@ -49,6 +49,6 @@ module.exports = async (client) => {
             }
         }
     } catch (error) {
-        console.log(`Error has occurred during deploying local commands: ${error}`);
+        console.log(`Error has occurred during deploying local commands:\n ${error}`);
     }
 };
