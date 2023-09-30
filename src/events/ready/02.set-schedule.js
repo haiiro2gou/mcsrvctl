@@ -19,27 +19,19 @@ export default async function eventFunction(client) {
             const proxyParse = (JSON.parse(proxyResponse.body).tunnels[0].public_url).substring(6).split(':', 2);
             const proxyAddress = proxyParse[0], proxyPort = Number(proxyParse[1]);
             result[0] = await getServerStatus(proxyAddress, proxyPort);
-        } catch (error) {
-            console.log(`Error has occured during getting response from the proxy:\n ${error}`);
-        }
+        } catch (error) {}
         try {
-            const hubAddress = process.env.SELF_IP, hubPort = Number(process.env.SERV_HUB);
+            const hubAddress = process.env.SELF_IP, hubPort = Number(process.env.PORT_HUB);
             result[1] = await getServerStatus(hubAddress, hubPort);
-        } catch (error) {
-            console.log(`Error has occured during getting response from the hub server:\n ${error}`);
-        }
+        } catch (error) {}
         try {
-            const tempAddress = process.env.HUB_IP, tempPort = Number(process.env.SERV_TEMP);
+            const tempAddress = process.env.HUB_IP, tempPort = Number(process.env.PORT_TEMP);
             result[2] = await getServerStatus(tempAddress, tempPort);
-        } catch (error) {
-            console.log(`Error has occured during getting response from the temporary server:\n ${error}`);
-        }
+        } catch (error) {}
         try {
-            const eventAddress = process.env.HUB_IP, eventPort = Number(process.env.SERV_EVENT);
+            const eventAddress = process.env.HUB_IP, eventPort = Number(process.env.PORT_EVENT);
             result[3] = await getServerStatus(eventAddress, eventPort);
-        } catch (error) {
-            console.log(`Error has occured during getting response from the event server:\n ${error}`);
-        }
+        } catch (error) {}
     
         modifyMessages(result);
     }, 15000);

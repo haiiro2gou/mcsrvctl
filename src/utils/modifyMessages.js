@@ -10,6 +10,7 @@ const client = new Client({
 export default async (input) => {
     try {
         const channel = await client.channels.fetch(`${process.env.STATUS_ID}`);
+        const bot = await client.users.fetch(`${process.env.APP_ID}`);
 
         const title = '## Server Status\n';
         const proxy = '```' + (input[0].check ? `${input[0].data.ip}` : 'N/A') + '```\n';
@@ -18,8 +19,13 @@ export default async (input) => {
         const event = (input[3].check ? `:green_circle: [Event] ${input[3].data.motd.clean} (${input[3].data.version.name})\n` : `:red_circle: [Event] -\n`);
         const time = `\nLast Update: ${new Date()} `;
 
-        channel.messages.fetch({ limit: 50 });
-        channel.send({ content: `${title + proxy + hub + temp + event + time}` });
+        const messages = await channel.messages.fetch({ limit: 50 });
+        const target = messages.find(message => message.author.id === process.env.APP_ID);
+        if (target !== undefined) {
+            target.edit({ content: `${title + proxy + hub + temp + event + time}` });
+        } else {
+            channel.send({ content: `${title + proxy + hub + temp + event + time}` });
+        }
     } catch (error) {
         console.log(`Error has occurred during modifying server status log.\n${error}`);
     }

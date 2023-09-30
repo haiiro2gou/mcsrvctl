@@ -18,7 +18,7 @@ export default async (addr, port) => {
         ret.data.ip = `${addr}:${port}`;
         ret.check = true;
     } catch (error) {
-        console.log(`Error has occurred during getting server status.\n${error}`);
+        console.log(`${error} (${addr}:${port})`);
         ret.check = false;
     }
     return ret;
