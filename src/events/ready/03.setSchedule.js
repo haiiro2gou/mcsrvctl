@@ -11,29 +11,33 @@ const servData = class {
 }
 
 export default async function eventFunction(client) {
-    setInterval(async () => {
+    setInterval(async (client) => {
         console.log(`${getTime(new Date())} Started pinging to the server!`);
-        let result = new servData(4);
+        let result = new servData(5);
     
         try {
-            const proxyResponse = await got({ url: `http://${process.env.SELF_IP}:4040/api/tunnels/` });
-            const proxyParse = (JSON.parse(proxyResponse.body).tunnels[0].public_url).substring(6).split(':', 2);
-            const proxyAddress = proxyParse[0], proxyPort = Number(proxyParse[1]);
-            result[0] = await getServerStatus(proxyAddress, proxyPort);
+            const ngrokResponse = await got({ url: `http://${process.env.SELF_IP}:4040/api/tunnels/` });
+            const ngrokParse = (JSON.parse(ngrokResponse.body).tunnels[0].public_url).substring(6).split(':', 2);
+            const ngrokAddress = ngrokParse[0], ngrokPort = Number(ngrokParse[1]);
+            result[0] = await getServerStatus(ngrokAddress, ngrokPort);
         } catch (error) { result[0] = { check: false, data: {} }; }
         try {
+            const proxyAddress = process.env.SELF_IP, proxyPort = Number(process.env.PORT_PROXY);
+            result[1] = await getServerStatus(proxyAddress, proxyPort);
+        } catch (error) { result[1] = { check: false, data: {} }; }
+        try {
             const hubAddress = process.env.SELF_IP, hubPort = Number(process.env.PORT_HUB);
-            result[1] = await getServerStatus(hubAddress, hubPort);
-        } catch (error) {}
+            result[2] = await getServerStatus(hubAddress, hubPort);
+        } catch (error) { result[2] = { check: false, data: {} }; }
         try {
             const tempAddress = process.env.HUB_IP, tempPort = Number(process.env.PORT_TEMP);
-            result[2] = await getServerStatus(tempAddress, tempPort);
-        } catch (error) {}
+            result[3] = await getServerStatus(tempAddress, tempPort);
+        } catch (error) { result[3] = { check: false, data: {} }; }
         try {
             const eventAddress = process.env.HUB_IP, eventPort = Number(process.env.PORT_EVENT);
-            result[3] = await getServerStatus(eventAddress, eventPort);
-        } catch (error) {}
+            result[4] = await getServerStatus(eventAddress, eventPort);
+        } catch (error) { result[4] = { check: false, data: {} }; }
     
-        modifyMessages(result);
+        modifyMessages(client, result);
     }, 60000);
 };
