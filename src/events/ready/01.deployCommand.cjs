@@ -7,10 +7,7 @@ const getTime = require('../../utils/getTime.cjs');
 module.exports = async (client) => {
     try {
         const localCommands = getLocalCommands();
-        const applicationCommands = await getApplicationCommands(
-            client,
-            testServer
-        );
+        const applicationCommands = await getApplicationCommands(client, testServer);
 
         for (const localCommand of localCommands) {
             const { name, description, options } = localCommand;
@@ -50,6 +47,6 @@ module.exports = async (client) => {
             }
         }
     } catch (error) {
-        console.log(`${getTime(new Date())} Error has occurred during deploying local commands:\n ${error}`);
+        console.log(`${getTime(new Date())} Error has occurred during deploying local commands.\n ${error}`);
     }
 };

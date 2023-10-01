@@ -1,4 +1,4 @@
-module.exports = (client, interaction) => { }; const { devs, testServer } = require('../../../config.json');
+const { devs, testServer } = require('../../../config.json');
 const getLocalCommands = require('../../utils/getLocalCommands.cjs');
 const getTime = require('../../utils/getTime.cjs');
 
