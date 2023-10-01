@@ -1,7 +1,7 @@
 import util from 'minecraft-server-util';
 import getTime from './getTime.cjs';
 const options = {
-    timeout: 1000 * 2,
+    timeout: 1000 * 5,
     enableSRV: true
 };
 

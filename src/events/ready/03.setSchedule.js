@@ -22,10 +22,6 @@ export default async (client) => {
             result[0] = await getServerStatus(ngrokAddress, ngrokPort);
         } catch (error) { result[0] = { check: false, data: {} }; }
         try {
-            const proxyAddress = process.env.SELF_IP, proxyPort = Number(process.env.PORT_PROXY);
-            result[1] = await getServerStatus(proxyAddress, proxyPort);
-        } catch (error) { result[1] = { check: false, data: {} }; }
-        try {
             const hubAddress = process.env.SELF_IP, hubPort = Number(process.env.PORT_HUB);
             result[2] = await getServerStatus(hubAddress, hubPort);
         } catch (error) { result[2] = { check: false, data: {} }; }
