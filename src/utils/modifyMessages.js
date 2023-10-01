@@ -21,6 +21,7 @@ export default async (client, input) => {
     } catch (error) {
         console.log(`${getTime(new Date())} Error has occurred during modifying server status log.\n${error}`);
     }
+
+    client.login(process.env.DISCORD_TOKEN);
 }
 
-client.login(process.env.DISCORD_TOKEN);
