@@ -1,11 +1,14 @@
 const { exec } = require('child_process');
 const { ApplicationCommandOptionType } = require('discord.js');
+const Rcon = require('rcon');
 
 const getTime = require('../../utils/getTime.cjs');
 
 module.exports = {
     name: 'start',
     description: 'Starts the indicated server.',
+    // devOnly: Boolean,
+    // testOnly: Boolean,
     options: [
         {
             name: "target-server",
@@ -14,7 +17,7 @@ module.exports = {
             choices: [
                 {
                     name: 'Hub',
-                    value: 'hub.hub',
+                    value: 'hub.null',
                 },
                 {
                     name: '魔導の箱庭',
@@ -32,6 +35,7 @@ module.exports = {
             required: true,
         },
     ],
+    // deleted: Boolean,
 
     callback: async (client, interaction) => {
         const { default: hubSetup } = await import('../../events/ready/02.hubSetup.js');
@@ -52,6 +56,10 @@ module.exports = {
             if (tempStatus.data?.players.online) {
                 await interaction.editReply(`Error: Someone is connecting to the temporary server.`);
                 return;
+            } else if (tempStatus.data !== undefined) {
+                const tempRcon = new Rcon(process.env.SELF_IP, Number(process.env.PORT_TEMP) + 10, process.env.RCON_TEMP);
+                tempRcon.on('auth', function() { tempRcon.send('stop'); });
+                await tempRcon.connect();
             }
         }
         else if (target[0] === 'event') {
@@ -59,9 +67,13 @@ module.exports = {
             if (eventStatus.data?.players.online) {
                 await interaction.editReply(`Error: Someone is connecting to the event server.`);
                 return;
+            } else if (eventStatus.data !== undefined) {
+                const eventRcon = new Rcon(process.env.SELF_IP, Number(process.env.PORT_EVENT) + 10, process.env.RCON_EVENT);
+                eventRcon.on('auth', function() { eventRcon.send('stop'); });
+                await eventRcon.connect();
             }
         }
-    
+
         const isWin = process.platform === 'win32';
         if (isWin) {
             exec(`start /d server_builder\\${target[0]}\\${target[1]} boot.bat`);
