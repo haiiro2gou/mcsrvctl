@@ -1,4 +1,6 @@
 import got from 'got';
+
+import { statusChannels } from '../../../config.json';
 import getServerStatus from '../../utils/getServerStatus.js';
 import getTime from '../../utils/getTime.cjs';
 
@@ -33,25 +35,26 @@ export default async (client) => {
             result[3] = await getServerStatus(eventAddress, eventPort);
         } catch (error) { result[3] = { check: false }; }
     
-        try {
-            const channel = await client.channels.fetch(`${process.env.STATUS_ID}`);
-    
-            const title = '## Server Status\n';
-            const ngrok = '```' + (result[0].check ? `${result[0].data.ip}` : 'N/A') + '```\n';
-            const hub = (result[1].check ? `:green_circle: [Hub] - (${result[1].data?.version.name})\n` : `:red_circle: [Hub] -\n`);
-            const temp = (result[2].check ? `:green_circle: [Temp] ${result[2].data?.motd.clean} (${result[2].data?.version.name})\n` : `:red_circle: [Temp] -\n`);
-            const event = (result[3].check ? `:green_circle: [Event] ${result[3].data?.motd.clean} (${result[3].data?.version.name})\n` : `:red_circle: [Event] -\n`);
-            const time = `\nLast Update: ${new Date()} `;
-    
-            const messages = await channel.messages.fetch({ limit: 50 });
-            const target = messages.find(message => message.author.id === process.env.APP_ID);
-            if (target !== undefined) {
-                target.edit({ content: `${title + ngrok + hub + temp + event + time}` });
-            } else {
-                channel.send({ content: `${title + ngrok + hub + temp + event + time}` });
+        const title = '## Server Status\n';
+        const ngrok = '```' + (result[0].check ? `${result[0].data.ip}` : 'N/A') + '```\n';
+        const hub = (result[1].check ? `:green_circle: [Hub] - (${result[1].data?.version.name})\n` : `:red_circle: [Hub] -\n`);
+        const temp = (result[2].check ? `:green_circle: [Temp] ${result[2].data?.motd.clean} (${result[2].data?.version.name})\n` : `:red_circle: [Temp] -\n`);
+        const event = (result[3].check ? `:green_circle: [Event] ${result[3].data?.motd.clean} (${result[3].data?.version.name})\n` : `:red_circle: [Event] -\n`);
+        const time = `\nLast Update: ${new Date()} `;
+        
+        for (const notifyId of statusChannels) {
+            try {
+                const channel = await client.channels.fetch(`${notifyId}`);
+                const messages = await channel.messages.fetch({ limit: 50 });
+                const target = messages.find(message => message.author.id === process.env.APP_ID);
+                if (target !== undefined) {
+                    target.edit({ content: `${title + ngrok + hub + temp + event + time}` });
+                } else {
+                    channel.send({ content: `${title + ngrok + hub + temp + event + time}` });
+                }
+            } catch (error) {
+                console.log(`${getTime(new Date())} Error has occurred during modifying server status log.\n${getTime(new Date())} ${error}`);
             }
-        } catch (error) {
-            console.log(`${getTime(new Date())} Error has occurred during modifying server status log.\n${getTime(new Date())} ${error}`);
         }
     
         client.login(process.env.DISCORD_TOKEN);

@@ -4,7 +4,6 @@
         "Your_Test_Server_Id"
     ],
     "testServer": "Your_Test_Server_Id",
-    "botId": "1087938015705440256",
     "devs": ["423751993400492033"],
     "mcServers": [
         {
@@ -19,5 +18,8 @@
             "name": "Your_Event_Server",
             "value": "event.Your_Event_Server_Directory"
         }
+    ],
+    "statusChannels": [
+        "Your_Server_Status_Notification_Channel_Id"
     ]
 }
