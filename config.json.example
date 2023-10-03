@@ -8,7 +8,7 @@
     "mcServers": [
         {
             "name": "Hub",
-            "value": "hub.null"
+            "value": "hub.hub"
         },
         {
             "name": "Your_Temporary_Server",
