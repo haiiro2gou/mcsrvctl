@@ -51,27 +51,19 @@ module.exports = {
             hubSetup(client);
             return;
         }
-        else if (target[0] === 'temp') {
-            const tempStatus = await getServerStatus(process.env.SELF_IP, Number(process.env.PORT_TEMP));
-            if (tempStatus.data?.players.online) {
-                await interaction.editReply(`Error: Someone is connecting to the temporary server.`);
-                return;
-            } else if (tempStatus.data !== undefined) {
-                const tempRcon = new Rcon(process.env.SELF_IP, Number(process.env.PORT_TEMP) + 10, process.env.RCON_TEMP);
-                tempRcon.on('auth', function() { tempRcon.send('stop'); });
-                await tempRcon.connect();
-            }
-        }
-        else if (target[0] === 'event') {
-            const eventStatus = await getServerStatus(process.env.SELF_IP, process.env.PORT_EVENT);
-            if (eventStatus.data?.players.online) {
-                await interaction.editReply(`Error: Someone is connecting to the event server.`);
-                return;
-            } else if (eventStatus.data !== undefined) {
-                const eventRcon = new Rcon(process.env.SELF_IP, Number(process.env.PORT_EVENT) + 10, process.env.RCON_EVENT);
-                eventRcon.on('auth', function() { eventRcon.send('stop'); });
-                await eventRcon.connect();
-            }
+
+        let serverIP, serverPort, rconPort, rconPass;
+        if (target[0] === 'temp') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_TEMP); rconPort = process.env.RCON_PORT_TEMP; rconPass = process.env.RCON_PASS_TEMP; }
+        else if (target[0] === 'event') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_EVENT); rconPort = process.env.RCON_PORT_EVENT; rconPass = process.env.RCON_PASS_EVENT; }
+        const serverStatus = await getServerStatus(serverIP, serverPort);
+        if (serverStatus.data?.players.online) {
+            await interaction.editReply(`Error: Someone is connecting to the ${target[0]} server.`);
+            return;
+        } else if (serverStatus.data !== undefined) {
+            const rcon = new Rcon(serverIP, rconPort, rconPass);
+            rcon.on('auth', function() { rcon.send('stop'); });
+            await rcon.connect();
+            console.log(`${getTime(new Date())} Server "${target[0]}" stop queue sent.`);
         }
 
         const isWin = process.platform === 'win32';

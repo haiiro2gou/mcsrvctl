@@ -42,18 +42,16 @@ module.exports = {
         await interaction.deferReply();
 
         let serverIP, serverPort, rconPass;
-        if (target === 'Hub') { serverIP = process.env.HUB_IP; serverPort = Number(process.env.PORT_HUB); rconPass = process.env.RCON_HUB; }
-        else if (target === 'Temp') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_TEMP); rconPass = process.env.RCON_TEMP; }
-        else if (target === 'Event') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_EVENT); rconPass = process.env.RCON_EVENT; }
+        if (target === 'Hub') { serverIP = process.env.HUB_IP; serverPort = Number(process.env.PORT_HUB); rconPort = process.env.RCON_PORT_HUB; rconPass = process.env.RCON_PASS_HUB; }
+        else if (target === 'Temp') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_TEMP); rconPort = process.env.RCON_PORT_TEMP; rconPass = process.env.RCON_PASS_TEMP; }
+        else if (target === 'Event') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_EVENT); rconPort = process.env.RCON_PORT_EVENT; rconPass = process.env.RCON_PASS_EVENT; }
         const serverStatus = await getServerStatus(serverIP, serverPort);
         if (serverStatus.data === undefined) {
             await interaction.editReply(`${target} server is already offline!`);
             return;
         }
-        const rcon = new Rcon(serverIP, serverPort + 10, rconPass);
-        rcon.on('auth', function() {
-            rcon.send('stop');
-        });
+        const rcon = new Rcon(serverIP, rconPort, rconPass);
+        rcon.on('auth', function() { rcon.send('stop'); });
         await rcon.connect();
 
         await interaction.editReply(`Server stop queued! ${target}`);
