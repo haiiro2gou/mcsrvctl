@@ -1,0 +1,23 @@
+{
+    "discordServers": [
+        "Your_Discord_Server_Id",
+        "Your_Test_Server_Id"
+    ],
+    "testServer": "Your_Test_Server_Id",
+    "botId": "1087938015705440256",
+    "devs": ["423751993400492033"],
+    "mcServers": [
+        {
+            "name": "Hub",
+            "value": "hub.null"
+        },
+        {
+            "name": "Your_Temporary_Server",
+            "value": "temp.Your_Temporary_Server_Directory"
+        },
+        {
+            "name": "Your_Event_Server",
+            "value": "event.Your_Event_Server_Directory"
+        }
+    ]
+}

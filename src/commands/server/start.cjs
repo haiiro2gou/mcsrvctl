@@ -2,6 +2,7 @@ const { exec } = require('child_process');
 const { ApplicationCommandOptionType } = require('discord.js');
 const Rcon = require('rcon');
 
+const { mcServers } = require('../../../config.json');
 const getTime = require('../../utils/getTime.cjs');
 
 module.exports = {
@@ -14,24 +15,7 @@ module.exports = {
             name: "target-server",
             description: "The server you want to boot.",
             type: ApplicationCommandOptionType.String,
-            choices: [
-                {
-                    name: 'Hub',
-                    value: 'hub.null',
-                },
-                {
-                    name: '魔導の箱庭',
-                    value: 'temp.hakoniwa',
-                },
-                {
-                    name: 'Spectral Zone',
-                    value: 'temp.spectral_zone',
-                },
-                {
-                    name: 'Undertale Arena',
-                    value: 'temp.undertale_arena',
-                },
-            ],
+            choices: mcServers,
             required: true,
         },
     ],

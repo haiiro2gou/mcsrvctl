@@ -1,11 +1,11 @@
-const { servers } = require('../../../config.json');
+const { discordServers } = require('../../../config.json');
 const areCommandsDifferent = require('../../utils/areCommandsDifferent.cjs');
 const getApplicationCommands = require('../../utils/getApplicationCommands.cjs');
 const getLocalCommands = require('../../utils/getLocalCommands.cjs');
 const getTime = require('../../utils/getTime.cjs');
 
 module.exports = async (client) => {
-    for (const server of servers) {
+    for (const server of discordServers) {
         try {
             const localCommands = getLocalCommands();
             const applicationCommands = await getApplicationCommands(client, server);
