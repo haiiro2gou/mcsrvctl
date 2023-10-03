@@ -50,6 +50,6 @@ module.exports = async (client, interaction) => {
 
         await commandObject.callback(client, interaction);
     } catch (error) {
-        console.log(`${getTime(new Date())} Error has occurred during running the command:\n ${error}`);
+        console.log(`${getTime(new Date())} Error has occurred during running the command:\n${getTime(new Date())} ${error}`);
     }
 };
