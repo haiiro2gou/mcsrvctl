@@ -13,7 +13,7 @@ export default async (client) => {
             else exec('screen -UAmdS proxy bash ./server_builder/proxy/boot.sh');
             console.log(`${getTime(new Date())} Proxy startup queue sent.`);
         } catch (error) {
-            console.log(`${getTime(new Date())} Error has occurred during the startup of the proxy. \n${error}`);
+            console.log(`${getTime(new Date())} Error has occurred during the startup of the proxy. \n${getTime(new Date())} ${error}`);
         }
     }
     if (!hub.check) {
@@ -22,7 +22,7 @@ export default async (client) => {
             else exec('screen -UAmdS hub bash ./server_builder/hub/boot.sh');
             console.log(`${getTime(new Date())} Hub startup queue sent.`);
         } catch (error) {
-            console.log(`${getTime(new Date())} Error has occurred during the startup of the hub. \n${error}`);
+            console.log(`${getTime(new Date())} Error has occurred during the startup of the hub. \n${getTime(new Date())} ${error}`);
         }
     }
 }
