@@ -33,6 +33,7 @@ module.exports = {
     
         if (target[0] === 'hub') {
             hubSetup(client);
+            await interaction.editReply(`Startup Queued! (arg: ${target[1]})`);
             return;
         }
 
