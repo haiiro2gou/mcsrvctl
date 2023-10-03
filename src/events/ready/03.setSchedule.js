@@ -1,6 +1,7 @@
+import { readFile } from 'fs/promises';
 import got from 'got';
+const json = JSON.parse(await readFile('./config.json'));
 
-import { statusChannels } from '../../../config.json';
 import getServerStatus from '../../utils/getServerStatus.js';
 import getTime from '../../utils/getTime.cjs';
 
@@ -42,7 +43,7 @@ export default async (client) => {
         const event = (result[3].check ? `:green_circle: [Event] ${result[3].data?.motd.clean} (${result[3].data?.version.name})\n` : `:red_circle: [Event] -\n`);
         const time = `\nLast Update: ${new Date()} `;
         
-        for (const notifyId of statusChannels) {
+        for (const notifyId of json.statusChannels) {
             try {
                 const channel = await client.channels.fetch(`${notifyId}`);
                 const messages = await channel.messages.fetch({ limit: 50 });
