@@ -42,7 +42,7 @@ module.exports = {
 
         await interaction.deferReply();
 
-        let serverIP, serverPort, rconPass;
+        let serverIP, serverPort, rconPort, rconPass;
         if (target === 'hub') { serverIP = process.env.HUB_IP; serverPort = Number(process.env.PORT_HUB); rconPort = process.env.RCON_PORT_HUB; rconPass = process.env.RCON_PASS_HUB; }
         else if (target === 'temp') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_TEMP); rconPort = process.env.RCON_PORT_TEMP; rconPass = process.env.RCON_PASS_TEMP; }
         else if (target === 'event') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_EVENT); rconPort = process.env.RCON_PORT_EVENT; rconPass = process.env.RCON_PASS_EVENT; }
