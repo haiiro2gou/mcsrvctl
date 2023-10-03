@@ -37,10 +37,10 @@ export default async (client) => {
             const channel = await client.channels.fetch(`${process.env.STATUS_ID}`);
     
             const title = '## Server Status\n';
-            const ngrok = '```' + (input[0].check ? `${input[0].data.ip}` : 'N/A') + '```\n';
-            const hub = (input[1].check ? `:green_circle: [Hub] - (${input[1].data?.version.name})\n` : `:red_circle: [Hub] -\n`);
-            const temp = (input[2].check ? `:green_circle: [Temp] ${input[2].data?.motd.clean} (${input[2].data?.version.name})\n` : `:red_circle: [Temp] -\n`);
-            const event = (input[3].check ? `:green_circle: [Event] ${input[3].data?.motd.clean} (${input[3].data?.version.name})\n` : `:red_circle: [Event] -\n`);
+            const ngrok = '```' + (result[0].check ? `${result[0].data.ip}` : 'N/A') + '```\n';
+            const hub = (result[1].check ? `:green_circle: [Hub] - (${result[1].data?.version.name})\n` : `:red_circle: [Hub] -\n`);
+            const temp = (result[2].check ? `:green_circle: [Temp] ${result[2].data?.motd.clean} (${result[2].data?.version.name})\n` : `:red_circle: [Temp] -\n`);
+            const event = (result[3].check ? `:green_circle: [Event] ${result[3].data?.motd.clean} (${result[3].data?.version.name})\n` : `:red_circle: [Event] -\n`);
             const time = `\nLast Update: ${new Date()} `;
     
             const messages = await channel.messages.fetch({ limit: 50 });

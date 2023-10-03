@@ -1,6 +1,7 @@
 const { ApplicationCommandOptionType } = require('discord.js');
 const Rcon = require('rcon');
 
+const capitalize = require(`../../utils/capitalize.cjs`);
 const getTime = require('../../utils/getTime.cjs');
 
 module.exports = {
@@ -16,15 +17,15 @@ module.exports = {
             choices: [
                 {
                     name: 'Hub',
-                    value: 'Hub',
+                    value: 'hub',
                 },
                 {
                     name: 'Temporary',
-                    value: 'Temporary',
+                    value: 'temp',
                 },
                 {
                     name: 'Event',
-                    value: 'Event',
+                    value: 'event',
                 },
             ],
             required: true,
@@ -37,23 +38,23 @@ module.exports = {
 
         const doer = await client.users.fetch(interaction.member.id);
         const target = await interaction.options.get('target-server').value;
-        console.log(`${getTime(new Date())} ${target} server stop queue from ${doer.username}!`);
+        console.log(`${getTime(new Date())} ${capitalize(target)} server stop queue from ${doer.username}!`);
 
         await interaction.deferReply();
 
         let serverIP, serverPort, rconPass;
-        if (target === 'Hub') { serverIP = process.env.HUB_IP; serverPort = Number(process.env.PORT_HUB); rconPort = process.env.RCON_PORT_HUB; rconPass = process.env.RCON_PASS_HUB; }
-        else if (target === 'Temp') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_TEMP); rconPort = process.env.RCON_PORT_TEMP; rconPass = process.env.RCON_PASS_TEMP; }
-        else if (target === 'Event') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_EVENT); rconPort = process.env.RCON_PORT_EVENT; rconPass = process.env.RCON_PASS_EVENT; }
+        if (target === 'hub') { serverIP = process.env.HUB_IP; serverPort = Number(process.env.PORT_HUB); rconPort = process.env.RCON_PORT_HUB; rconPass = process.env.RCON_PASS_HUB; }
+        else if (target === 'temp') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_TEMP); rconPort = process.env.RCON_PORT_TEMP; rconPass = process.env.RCON_PASS_TEMP; }
+        else if (target === 'event') { serverIP = process.env.SELF_IP; serverPort = Number(process.env.PORT_EVENT); rconPort = process.env.RCON_PORT_EVENT; rconPass = process.env.RCON_PASS_EVENT; }
         const serverStatus = await getServerStatus(serverIP, serverPort);
-        if (serverStatus.data === undefined) {
-            await interaction.editReply(`${target} server is already offline!`);
+        if (!serverStatus.check) {
+            await interaction.editReply(`${capitalize(target)} server is already offline!`);
             return;
         }
         const rcon = new Rcon(serverIP, rconPort, rconPass);
         rcon.on('auth', function() { rcon.send('stop'); });
         await rcon.connect();
 
-        await interaction.editReply(`Server stop queued! ${target}`);
+        await interaction.editReply(`Server stop queued! (arg: ${target})`);
     },
 };
