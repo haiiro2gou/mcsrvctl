@@ -5,6 +5,8 @@ const Rcon = require('rcon');
 const { mcServers } = require('../../../config.json');
 const getTime = require('../../utils/getTime.cjs');
 
+let lastExec = 0;
+
 module.exports = {
     name: 'start',
     description: 'Starts the indicated server.',
@@ -30,6 +32,15 @@ module.exports = {
         console.log(`${getTime(new Date())} Server "${target[1]}" boot queue from ${doer.username}!`);
 
         await interaction.deferReply();
+
+        const elapsed = new Date() - lastExec;
+        if (elapsed < 60000) {
+            console.log(`${getTime(new Date())} Error: Startup queue on cooldown! (elapsed: ${elapsed}ms)`);
+            await interaction.editReply(`This command is on cooldown for 60 seconds.\nRemaining: ${Math.floor((60000 - elapsed) / 1000)}s`);
+            return;
+        } else {
+            lastExec = new Date();
+        }
     
         if (target[0] === 'hub') {
             hubSetup(client);
