@@ -1,3 +1,0 @@
-[submodule "server_builder"]
-	path = server
-	url = git@github.com:haiiro2gou/server_builder.git
