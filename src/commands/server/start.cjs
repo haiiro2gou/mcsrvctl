@@ -64,9 +64,9 @@ module.exports = {
 
         const isWin = process.platform === 'win32';
         if (isWin) {
-            exec(`start /d server_builder\\${target[0]}\\${target[1]} boot.bat`);
+            exec(`start /d server\\${target[0]}\\${target[1]} boot.bat`);
         } else {
-            exec(`screen -UAmdS ${target[1]} bash ./server_builder/${target[0]}/${target[1]}/boot.sh`);
+            exec(`screen -UAmdS ${target[1]} bash ./server/${target[0]}/${target[1]}/boot.sh`);
         }
     
         await interaction.editReply(`Startup Queued! (arg: ${target[1]})`);
