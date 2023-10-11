@@ -57,8 +57,9 @@ module.exports = {
             return;
         } else if (serverStatus.data !== undefined) {
             const rcon = new Rcon(serverIP, rconPort, rconPass);
-            rcon.on('auth', function() { rcon.send('stop'); });
-            await rcon.connect();
+            await rcon.on('auth', function() { rcon.send('stop'); });
+            rcon.connect();
+            setTimeout(() => { rcon.disconnect(); }, 500);
             console.log(`${getTime(new Date())} Server "${target[0]}" stop queue sent.`);
         }
 
