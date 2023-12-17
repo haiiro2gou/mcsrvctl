@@ -24,7 +24,7 @@ module.exports = {
     // deleted: Boolean,
 
     callback: async (client, interaction) => {
-        const { default: hubSetup } = await import('../../events/ready/02.hubSetup.js');
+        const { default: hubSetup } = await import('../../events/ready/03.hubSetup.js');
         const { default: getServerStatus } = await import('../../utils/getServerStatus.js');
 
         const doer = await client.users.fetch(interaction.member.id);

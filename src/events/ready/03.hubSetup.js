@@ -9,8 +9,8 @@ export default async (client) => {
 
     if (!proxy.check) {
         try {
-            if (isWin) exec('start /d server\\proxy boot.bat');
-            else exec('screen -UAmdS proxy bash ./server/proxy/boot.sh');
+            if (isWin) exec('start /d server\\velocity boot.bat');
+            else exec('screen -UAmdS proxy bash ./server/velocity/boot.sh');
             console.log(`${getTime(new Date())} Proxy startup queue sent.`);
         } catch (error) {
             console.log(`${getTime(new Date())} Error has occurred during the startup of the proxy. \n${getTime(new Date())} ${error}`);

@@ -38,9 +38,9 @@ export default async (client) => {
     
         const title = '## Server Status\n';
         const ngrok = '```' + (result[0].check ? `${result[0].data.ip}` : 'N/A') + '```\n';
-        const hub = (result[1].check ? `:green_circle: [Hub] - (${result[1].data?.version.name})\n` : `:red_circle: [Hub] -\n`);
-        const temp = (result[2].check ? `:green_circle: [Temp] ${result[2].data?.motd.clean} (${result[2].data?.version.name})\n` : `:red_circle: [Temp] -\n`);
-        const event = (result[3].check ? `:green_circle: [Event] ${result[3].data?.motd.clean} (${result[3].data?.version.name})\n` : `:red_circle: [Event] -\n`);
+        const hub = (result[1].check ? `:green_circle: [Hub] - (Players: ${result[1].data?.players.online}/${$result[1].data?.players.max} / ${result[1].data?.version.name})\n` : `:red_circle: [Hub] -\n`);
+        const temp = (result[2].check ? `:green_circle: [Temp] ${result[2].data?.motd.clean} (Players: ${result[2].data?.players.online}/${$result[2].data?.players.max} / ${result[2].data?.version.name})\n` : `:red_circle: [Temp] -\n`);
+        const event = (result[3].check ? `:green_circle: [Event] ${result[3].data?.motd.clean} (Players: ${result[3].data?.players.online}/${$result[3].data?.players.max} / ${result[3].data?.version.name})\n` : `:red_circle: [Event] -\n`);
         const time = `\nLast Update: ${new Date()} `;
         
         for (const notifyId of json.statusChannels) {
