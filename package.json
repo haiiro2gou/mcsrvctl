@@ -3,8 +3,9 @@
 	"version": "2.0.0",
 	"description": "Enables to boot Minecraft servers from Discord!",
 	"main": "src/index.js",
+	"type": "module",
 	"scripts": {
-		"test": "echo \\\"Error: no test specified\\\" && exit 1"
+		"test": "node src/index.js"
 	},
 	"repository": {
 		"type": "git",
@@ -15,5 +16,10 @@
 	"bugs": {
 		"url": "https://github.com/haiiro2gou/mcsrvctl/issues"
 	},
-	"homepage": "https://github.com/haiiro2gou/mcsrvctl#readme"
+	"homepage": "https://github.com/haiiro2gou/mcsrvctl#readme",
+	"dependencies": {
+		"discord.js": "^14.15.2",
+		"dotenv": "^16.4.5",
+		"modern-rcon": "^1.0.3"
+	}
 }
