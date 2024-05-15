@@ -1,25 +1,19 @@
 {
-  "name": "minecraft_server_controller",
-  "version": "1.0.0",
-  "description": "Enables to boot Minecraft servers from Discord!",
-  "main": "src/index.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "mcsrvctl"
-  ],
-  "author": "haiiro2gou",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "child_process": "^1.0.2",
-    "discord.js": "^14.13.0",
-    "dotenv": "^16.3.1",
-    "got": "^13.0.0",
-    "minecraft-protocol": "^1.44.0",
-    "minecraft-server-util": "^5.4.4",
-    "node-cron": "^3.0.2",
-    "rcon": "^1.1.0"
-  }
+	"name": "mcsrvctl",
+	"version": "2.0.0",
+	"description": "Enables to boot Minecraft servers from Discord!",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \\\"Error: no test specified\\\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/haiiro2gou/mcsrvctl.git"
+	},
+	"author": "haiiro2gou",
+	"license": "Apache-2.0",
+	"bugs": {
+		"url": "https://github.com/haiiro2gou/mcsrvctl/issues"
+	},
+	"homepage": "https://github.com/haiiro2gou/mcsrvctl#readme"
 }

@@ -27,5 +27,5 @@ This repository is licensed under [Apache-2.0 License](LICENSE).
 ### Contact
 
 **Discord: haiiro2gou**  
-**X(Twitter): [@blanoir3298](https://twitter.com/blanoir3298)**  
-**Youtube: [はいいろ。](https://www.youtube.com/@haiiro2gou)**
+**X(Twitter): [@blanoir3298](https://x.com/blanoir3298)**  
+**Youtube: [はいいろ](https://www.youtube.com/@haiiro2gou)**
