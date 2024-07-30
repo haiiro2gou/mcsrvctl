@@ -19,7 +19,13 @@ module.exports = async (client) => {
                 );
 
                 if (existingCommand) {
-                    if (localCommand.deleted) {
+                    if (
+                        localCommand.deleted ||
+                        (
+                            localCommand.testOnly &&
+                            server.id !== config.testServer
+                        )
+                    ) {
                         await applicationCommands.delete(existingCommand.id);
                         log(`Deleted command: ${name}`);
                         continue;
@@ -35,6 +41,13 @@ module.exports = async (client) => {
                 } else {
                     if (localCommand.deleted) {
                         log(`Skipped registering command because of deleted: ${name}`, 'WARN');
+                        continue;
+                    }
+
+                    if (
+                        localCommand.testOnly &&
+                        server.id !== config.testServer
+                    ) {
                         continue;
                     }
 

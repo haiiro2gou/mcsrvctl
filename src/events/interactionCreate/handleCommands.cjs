@@ -25,6 +25,8 @@ module.exports = async (client, interaction) => {
             }
         }
 
+        // disabled due to no registration.
+        /*
         if (commandObject.testOnly) {
             if (!(interaction.guild.id === config.testServer)) {
                 interaction.reply({
@@ -34,6 +36,7 @@ module.exports = async (client, interaction) => {
                 return;
             }
         }
+        */
 
         if (commandObject.permissionsRequired?.length) {
             for (const permission of commandObject.permissionsRequired) {
