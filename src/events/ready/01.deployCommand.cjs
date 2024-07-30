@@ -40,7 +40,7 @@ module.exports = async (client) => {
                     }
                 } else {
                     if (localCommand.deleted) {
-                        log(`Skipped registering command because of deleted: ${name}`, 'WARN');
+                        log(`Skipped registering command because of deleted: ${name}`, 'Warn');
                         continue;
                     }
 
@@ -61,8 +61,8 @@ module.exports = async (client) => {
                 }
             }
         } catch (err) {
-            log('Error has occurred during deploying local commands.', 'ERROR');
-            log(err, 'ERROR');
+            log('Error has occurred during deploying local commands.', 'Error');
+            log(err, 'Error');
         }
     }
 }

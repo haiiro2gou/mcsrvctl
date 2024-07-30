@@ -65,7 +65,7 @@ module.exports = async (client, interaction) => {
 
         await commandObject.callback(client, interaction);
     } catch (err) {
-        log("Error has occurred during running the command.", "ERROR");
-        log(`${err}`, "ERROR")
+        log("Error has occurred during running the command.", "Error");
+        log(`${err}`, "Error")
     }
 }
