@@ -1,0 +1,20 @@
+{
+    "servers": [
+        {
+            "id": "Discord_Server_Id",
+            "forge": {
+                "cf_api_key": "CurseForge_API_Key"
+            },
+            "builds": []
+        },
+        {
+            "id": "Discord_Server_Id_2",
+            "builds": []
+        }
+    ],
+    "testServer": "Your_Test_server_Id",
+    "devs": [
+        "Developer_Id_1",
+        "Developer_Id_2"
+    ]
+}

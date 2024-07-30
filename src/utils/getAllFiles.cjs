@@ -1,13 +1,13 @@
-import { readdirSync } from 'fs';
-import { join } from 'path';
+const fs = require('fs');
+const path = require('path');
 
-export default (directory, foldersOnly = false) => {
+module.exports = (directory, foldersOnly = false) => {
     let fileNames = [];
 
-    const files = readdirSync(directory, { withFileTypes: true });
+    const files = fs.readdirSync(directory, { withFileTypes: true });
 
     for (const file of files) {
-        const filePath = join(directory, file.name);
+        const filePath = path.join(directory, file.name);
 
         if (foldersOnly) {
             if (file.isDirectory()) {

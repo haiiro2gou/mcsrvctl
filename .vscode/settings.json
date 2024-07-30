@@ -7,4 +7,10 @@
         "master"
     ],
     "git.branchProtectionPrompt": "alwaysPrompt",
+    "git-graph.customEmojiShortcodeMappings": [
+        {
+            "shortcode": ":technologist:",
+            "emoji": "🧑‍💻"
+        },
+    ],
 }

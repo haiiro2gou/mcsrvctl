@@ -19,6 +19,7 @@
 	},
 	"homepage": "https://github.com/haiiro2gou/mcsrvctl#readme",
 	"dependencies": {
+		"@kubernetes/client-node": "^0.21.0",
 		"discord.js": "^14.15.2",
 		"dotenv": "^16.4.5",
 		"modern-rcon": "^1.0.3"
