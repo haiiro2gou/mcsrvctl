@@ -9,7 +9,7 @@ const getApplicationCommands = require('../../utils/getApplicationCommands.cjs')
 const areCommandsDifferent = require('../../utils/areCommandsDifferent.cjs');
 
 module.exports = async (client) => {
-    for (const server of config.servers) {
+    for (const server of config.guilds) {
         cache.cursor = server.id;
         fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
         try {

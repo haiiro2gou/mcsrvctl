@@ -1,5 +1,5 @@
 {
-    "servers": [
+    "guilds": [
         {
             "id": "Discord_Server_Id",
             "forge": {

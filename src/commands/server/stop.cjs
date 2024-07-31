@@ -20,7 +20,7 @@ module.exports = {
             name: "target-server",
             description: "The server you want to boot.",
             type: ApplicationCommandOptionType.String,
-            choices: config.servers.filter(server => server.id === cache.cursor)[0].builds.map(build => ({ name: build.alias, value: build.name })),
+            choices: config.guilds.filter(server => server.id === cache.cursor)[0].builds.map(build => ({ name: build.alias, value: build.name })),
             required: true,
         },
     ],
