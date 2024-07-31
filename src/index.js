@@ -6,8 +6,10 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import log from './utils/logOutput.cjs';
 import { GatewayIntentBits, Client, Partials } from 'discord.js';
+import cron from 'node-cron';
 
 import eventHandler from './handlers/eventHandler.js';
+import timeHandler from './handlers/timeHandler.js';
 
 const client = new Client({
     intents: [
@@ -35,5 +37,8 @@ if (!fs.existsSync(path.join(__dirname, '..', 'cache.json'))) {
 }
 
 eventHandler(client);
+cron.schedule('0 * * * * *', () => {
+    timeHandler()
+});
 
 client.login(process.env.DISCORD_TOKEN);
