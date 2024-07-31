@@ -1,5 +1,5 @@
 import log from '../../utils/logOutput.cjs';
 
-export default (client) => {
+export default async (client) => {
     log(`${client.user.tag} is ready!`);
 }
