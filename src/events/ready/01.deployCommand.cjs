@@ -1,6 +1,7 @@
 const config = require('../../../config.json');
-const log = require('../../utils/logOutput.cjs');
+const cache = require('../../../cache.json');
 const fs = require('fs');
+const log = require('../../utils/logOutput.cjs');
 const path = require('path');
 
 const getLocalCommands = require('../../utils/getLocalCommands.cjs');
@@ -9,7 +10,7 @@ const areCommandsDifferent = require('../../utils/areCommandsDifferent.cjs');
 
 module.exports = async (client) => {
     for (const server of config.servers) {
-        let cache = { cursor: server.id };
+        cache.cursor = server.id;
         fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
         try {
             const localCommands = getLocalCommands(undefined,server);
@@ -69,6 +70,6 @@ module.exports = async (client) => {
             log(err, 'Error');
         }
     }
-    let cache = {};
+    delete cache.cursor;
     fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
 }
