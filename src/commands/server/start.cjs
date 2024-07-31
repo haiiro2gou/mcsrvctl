@@ -1,11 +1,16 @@
-const log = require('../../utils/logOutput.cjs');
-const { ApplicationCommandOptionType } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType } = require('discord.js');
 const k8s = require('@kubernetes/client-node');
+const log = require('../../utils/logOutput.cjs');
 
 const config = require('../../../config.json');
 const cache = require('../../../cache.json');
 
 module.exports = {
+    /**
+     * @param { Client } client
+     * @param { Interaction } interaction
+     */
+
     name: 'start',
     description: 'Starts the indicated server.',
     // devOnly: Boolean,

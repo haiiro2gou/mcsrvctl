@@ -1,6 +1,12 @@
+const { Client, Interaction } = require('discord.js');
 const log = require('../../utils/logOutput.cjs');
 
 module.exports = {
+    /**
+     * @param { Client } client
+     * @param { Interaction } interaction
+     */
+
     name: 'kill',
     description: 'Kill the bot process',
     devOnly: true,
