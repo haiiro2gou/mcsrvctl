@@ -23,9 +23,15 @@ const client = new Client({
     ],
 });
 
+if (!fs.existsSync(path.join(__dirname, '..', 'config.json'))) {
+    log('Config file cannot be found.', 'Warn');
+    fs.writeFileSync(path.join(__dirname, '..', 'config.json'), '{"guilds":[]}');
+    log('Config file has been generated.', 'Warn');
+}
 if (!fs.existsSync(path.join(__dirname, '..', 'cache.json'))) {
+    log('Cache file cannot be found.', 'Warn');
     fs.writeFileSync(path.join(__dirname, '..', 'cache.json'), '{}');
-    log('Cache file has been generated.');
+    log('Cache file has been generated.', 'Warn');
 }
 
 eventHandler(client);
