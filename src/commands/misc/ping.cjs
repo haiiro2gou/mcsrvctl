@@ -23,6 +23,6 @@ module.exports = {
         interaction.editReply(`Pong! (${ping} ms)`);
 
         const doer = await client.users.fetch(interaction.member.id);
-        log(`Ping from ${doer.username} (server: ${reply.guild.name})!`);
+        log(`[${reply.guild.name}] Ping from ${doer.username}!`);
     },
 }
