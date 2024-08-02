@@ -4,12 +4,12 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import cron from 'node-cron';
 import log from './utils/logOutput.cjs';
 import { GatewayIntentBits, Client, Partials } from 'discord.js';
-import cron from 'node-cron';
 
 import eventHandler from './handlers/eventHandler.js';
-import timeHandler from './handlers/timeHandler.js';
+import { queueProcess, filterServerCache } from './handlers/timeHandler.js';
 
 const client = new Client({
     intents: [
@@ -37,8 +37,11 @@ if (!fs.existsSync(path.join(__dirname, '..', 'cache.json'))) {
 }
 
 eventHandler(client);
-cron.schedule('0 * * * * *', () => {
-    timeHandler()
+cron.schedule('*/10 * * * * *', async () => {
+    queueProcess();
+});
+cron.schedule('0 0 5 * * *', async () => {
+    filterServerCache();
 });
 
 client.login(process.env.DISCORD_TOKEN);
