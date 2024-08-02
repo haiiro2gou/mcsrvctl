@@ -44,7 +44,7 @@ module.exports = {
         const doer = await client.users.fetch(interaction.member.id);
         log(`[${reply.guild.name}] Server "${targetName}" boot queue from ${doer.username}!`);
 
-        const serverStatus = getServerStatus(`${target}.${process.env.NAMESPACE}-${config.guilds.filter((element) => element.id === reply.guild.id)[0].id}`);
+        const serverStatus = await getServerStatus(`${target}.${process.env.NAMESPACE}-${config.guilds.filter((element) => element.id === reply.guild.id)[0].id}`);
         if (serverStatus.online) {
             await interaction.editReply(`This server is already online!`);
             log(`[${reply.guild.name}] Server "${targetName}" is already online!`, 'Warn');

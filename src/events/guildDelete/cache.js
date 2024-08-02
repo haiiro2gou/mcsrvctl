@@ -3,12 +3,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import config from '../../../config.json' assert { type: "json" };
-import cache from '../../../cache.json' assert { type: "json" };
 import log from '../../utils/logOutput.cjs';
 
 export default async (client, guild) => {
     log(`Left the guild '${guild.name}' (id: ${guild.id}).`);
 
+    const { default: cache } = await import('../../../cache.json', { assert: { type: "json" } });
     if (!cache.guilds?.length) cache.guilds = [];
     cache.guilds.push(config.guilds.filter((element) => element.id === guild.id)[0]);
     const merger = { date: (new Date()).toISOString() };

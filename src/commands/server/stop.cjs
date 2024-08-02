@@ -41,13 +41,13 @@ module.exports = {
         const doer = await client.users.fetch(interaction.member.id);
         log(`[${reply.guild.name}] Server "${targetName}" stop queue from ${doer.username}!`);
 
-        const serverStatus = getServerStatus(`${target}.${process.env.NAMESPACE}-${config.guilds.filter((element) => element.id === reply.guild.id)[0].id}`);
+        const serverStatus = await getServerStatus(`${target}.${process.env.NAMESPACE}-${config.guilds.filter((element) => element.id === reply.guild.id)[0].id}`);
         if (!serverStatus.online) {
             await interaction.editReply(`This server seems to be offline!`);
             log(`[${reply.guild.name}] Server "${targetName}" is already offline!`, 'Warn');
             return;
         }
-        if (serverStatus.online && serverStatus.players.online !== 0) {
+        if (serverStatus.online && serverStatus.data.players.online !== 0) {
             await interaction.editReply(`This server appears to have ${serverStatus.players.online} online player(s) connected to it!`);
             log(`[${reply.guild.name}] Server "${targetName}" have ${serverStatus.players.online} online player(s)!`, 'Warn');
             return;
