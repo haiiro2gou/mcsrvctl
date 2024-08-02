@@ -6,11 +6,10 @@ WORKDIR /app
 RUN apk add --no-cache tini
 ENTRYPOINT ["/sbin/tini", "--"]
 
-COPY --chown=node:node package.json ./
+COPY --chown=node:node package.json /app/
 RUN npm install
 
-COPY --chown=node:node . .
-COPY --chown=node:node src/ /app/src/
+COPY --chown=node:node src/ /app/
 
 USER node
 CMD ["node", "src/index.js"]
