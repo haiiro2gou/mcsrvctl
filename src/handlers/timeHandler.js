@@ -32,13 +32,12 @@ export async function filterServerCache() {
 }
 
 export async function updateServerStatus(client) {
-    log('Started pinging to the server!');
     for (const guild of config.guilds) {
         const current = cache.notification.find((element) => element.id === guild.id) || { id: guild.id, data: [] };
         let result = [];
 
         for (const build of guild.builds) {
-            const status = await getServerStatus(`${build.name}.${process.env.NAMESPACE}-${guild.id}`, 25565);
+            const status = await getServerStatus(`${build.name}.${process.env.NAMESPACE}-${guild.id}`);
             result.push({
                 name: build.alias,
                 online: status.online,
@@ -49,19 +48,19 @@ export async function updateServerStatus(client) {
         }
 
         let check = true;
-        if (!current.length) {
-            check = false;
-        }
-        if (!result.length) {
+        if (!current.data.length ||
+            !result.length ||
+            current.data.length !== result.length
+        ) {
             check = false;
         }
         if (check) {
             for (const status of result) {
-                if (!current.some((element) => element.name === status.name)) {
+                if (!current.data.some((element) => element.name === status.name)) {
                     check = false;
                     break;
                 }
-                const c = current.find((element) => element.name === status.name);
+                const c = current.data.find((element) => element.name === status.name);
                 if (
                     c.name !== status.name ||
                     c.online !== status.online ||
@@ -76,6 +75,9 @@ export async function updateServerStatus(client) {
         }
 
         if (!check) {
+            const guildName = await client.guilds.cache.get(guild.id).name;
+            log(`[${guildName}] Server data has been updated!`);
+
             let content = `## Server Status\n\`\`\`${process.env.IP_ALIAS}\`\`\`\n`;
             for (const status of result) {
                 if (status.online) {
