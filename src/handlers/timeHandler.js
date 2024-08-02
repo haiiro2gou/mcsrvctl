@@ -9,7 +9,7 @@ import config from '../../config.json' assert { type: "json" };
 import getServerStatus from '../utils/getServerStatus.js';
 
 export async function queueProcess() {
-    const { default: cache } = await import('../../../cache.json', { assert: { type: "json" } });
+    const { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
     if (cache.queue?.length) {
         const q = cache.queue.shift();
         log(`Started processing the start-up queue of server "${q.server}".`);
@@ -27,14 +27,14 @@ export async function queueProcess() {
 }
 
 export async function filterServerCache() {
-    const { default: cache } = await import('../../../cache.json', { assert: { type: "json" } });
+    const { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
     cache.guilds = cache.guilds.filter((element) => parseInt((new Date() - new Date(element.date)) / 1000 / 60 / 60 / 24) <= 30);
     fs.writeFileSync(path.join(__dirname, '..', '..', 'cache.json'), JSON.stringify(cache));
 }
 
 export async function updateServerStatus(client) {
-    const { default: cache } = await import('../../../cache.json', { assert: { type: "json" } });
-    
+    const { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
+
     for (const guild of config.guilds) {
         const current = cache.notification.find((element) => element.id === guild.id) || { id: guild.id, data: [] };
         let result = [];
