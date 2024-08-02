@@ -43,7 +43,7 @@ export async function updateServerStatus(client) {
                 online: status.online,
                 players: status.data?.players.online || 0,
                 max: status.data?.players.max || 0,
-                motd: status.data?.description.text.replace(/\n/, ' ') || "",
+                // motd: status.data?.description.text.replace(/\n/, ' ') || "",
             });
         }
 
@@ -65,8 +65,8 @@ export async function updateServerStatus(client) {
                     c.name !== status.name ||
                     c.online !== status.online ||
                     c.players !== status.players ||
-                    c.max !== status.max ||
-                    c.motd !== status.motd
+                    c.max !== status.max // ||
+                    // c.motd !== status.motd
                 ) {
                     check = false;
                     break;

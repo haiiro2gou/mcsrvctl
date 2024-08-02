@@ -10,8 +10,6 @@ export default async (addr, port = 25565, query = false) => {
         status.online = true;
         status.data = response;
     })
-    .catch((error) => {
-        log(`${error} (${addr}:${port})`, 'Error');
-    });
+    .catch((error) => {});
     return status;
 }
