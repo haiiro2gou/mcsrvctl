@@ -25,6 +25,7 @@ module.exports = {
     // deleted: Boolean,
 
     callback: async (client, interaction) => {
+        const path = require('path');
         const { NodeSSH } = require('node-ssh');
         const log = require('../../utils/logOutput.cjs');
         const { default: getServerStatus } = await import('../../utils/getServerStatus.js');
