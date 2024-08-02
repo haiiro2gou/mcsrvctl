@@ -1,25 +1,20 @@
 {
-    "discordServers": [
-        "Your_Discord_Server_Id",
-        "Your_Test_Server_Id"
-    ],
-    "testServer": "Your_Test_Server_Id",
-    "devs": ["423751993400492033"],
-    "mcServers": [
+    "guilds": [
         {
-            "name": "Hub",
-            "value": "hub.hub"
+            "id": "Discord_Server_Id",
+            "forge": {
+                "cf_api_key": "CurseForge_API_Key"
+            },
+            "builds": []
         },
         {
-            "name": "Your_Temporary_Server",
-            "value": "temp.Your_Temporary_Server_Directory"
-        },
-        {
-            "name": "Your_Event_Server",
-            "value": "event.Your_Event_Server_Directory"
+            "id": "Discord_Server_Id_2",
+            "builds": []
         }
     ],
-    "statusChannels": [
-        "Your_Server_Status_Notification_Channel_Id"
+    "testServer": "Your_Test_server_Id",
+    "devs": [
+        "Developer_Id_1",
+        "Developer_Id_2"
     ]
 }

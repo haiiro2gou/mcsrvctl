@@ -7,22 +7,19 @@ module.exports = {
      * @param { Interaction } interaction
      */
 
-    name: 'ping',
-    description: 'Pong!',
-    // devOnly: Boolean,
-    // testOnly: Boolean,
+    name: 'kill',
+    description: 'Kill the bot process',
+    devOnly: true,
+    testOnly: true,
     // options: Object[],
     // deleted: Boolean,
 
     callback: async (client, interaction) => {
         await interaction.deferReply();
-
-        const reply = await interaction.fetchReply();
-
-        const ping = reply.createdTimestamp - interaction.createdTimestamp;
-        interaction.editReply(`Pong! (${ping} ms)`);
+        await interaction.editReply(`Killing the process...`);
 
         const doer = await client.users.fetch(interaction.member.id);
-        log(`[${reply.guild.name}] Ping from ${doer.username}!`);
+        log(`Kill command from ${doer.username}.`);
+        process.exit(0);
     },
 }

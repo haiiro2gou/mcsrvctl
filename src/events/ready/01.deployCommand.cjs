@@ -1,14 +1,20 @@
-const { discordServers } = require('../../../config.json');
-const areCommandsDifferent = require('../../utils/areCommandsDifferent.cjs');
-const getApplicationCommands = require('../../utils/getApplicationCommands.cjs');
+const config = require('../../../config.json');
+const cache = require('../../../cache.json');
+const fs = require('fs');
+const log = require('../../utils/logOutput.cjs');
+const path = require('path');
+
 const getLocalCommands = require('../../utils/getLocalCommands.cjs');
-const getTime = require('../../utils/getTime.cjs');
+const getApplicationCommands = require('../../utils/getApplicationCommands.cjs');
+const areCommandsDifferent = require('../../utils/areCommandsDifferent.cjs');
 
 module.exports = async (client) => {
-    for (const server of discordServers) {
+    for (const server of config.guilds) {
+        cache.cursor = server.id;
+        fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
         try {
-            const localCommands = getLocalCommands();
-            const applicationCommands = await getApplicationCommands(client, server);
+            const localCommands = getLocalCommands(undefined,server);
+            const applicationCommands = await getApplicationCommands(client, server.id);
 
             for (const localCommand of localCommands) {
                 const { name, description, options } = localCommand;
@@ -18,9 +24,15 @@ module.exports = async (client) => {
                 );
 
                 if (existingCommand) {
-                    if (localCommand.deleted) {
+                    if (
+                        localCommand.deleted ||
+                        (
+                            localCommand.testOnly &&
+                            server.id !== config.testServer
+                        )
+                    ) {
                         await applicationCommands.delete(existingCommand.id);
-                        console.log(`${getTime(new Date())} Deleted command: ${name}`);
+                        log(`Deleted command: ${name}`);
                         continue;
                     }
 
@@ -29,12 +41,18 @@ module.exports = async (client) => {
                             description,
                             options,
                         });
-
-                        console.log(`${getTime(new Date())} Edited command: ${name}`);
+                        log(`Edited command: ${name}`);
                     }
                 } else {
                     if (localCommand.deleted) {
-                        console.log(`${getTime(new Date())} Skipped registering command because of deleted: ${name}`);
+                        log(`Skipped registering command because of deleted: ${name}`, 'Warn');
+                        continue;
+                    }
+
+                    if (
+                        localCommand.testOnly &&
+                        server.id !== config.testServer
+                    ) {
                         continue;
                     }
 
@@ -44,11 +62,14 @@ module.exports = async (client) => {
                         options,
                     });
 
-                    console.log(`${getTime(new Date())} Registered command: ${name}`);
+                    log(`Registered command: ${name}`);
                 }
             }
-        } catch (error) {
-            console.log(`${getTime(new Date())} Error has occurred during deploying local commands.\n${getTime(new Date())} ${error}`);
+        } catch (err) {
+            log('Error has occurred during deploying local commands.', 'Error');
+            log(err, 'Error');
         }
     }
-};
+    delete cache.cursor;
+    fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
+}

@@ -1,26 +1,11 @@
-import util from 'minecraft-server-util';
-import getTime from './getTime.cjs';
-const options = {
-    timeout: 1000 * 5,
-    enableSRV: true
-};
+import api from 'node-mcstatus';
 
-const servData = class {
-    constructor(_check, _result) {
-        this.check = _check;
-        this.data = _result;
-    };
-}
-
-export default async (addr, port) => {
-    var ret = new servData;
+export default async (addr, port = 25565, query = false) => {
     try {
-        ret.data = await util.status(addr, port, options);
-        ret.data.ip = `${addr}:${port}`;
-        ret.check = true;
+        const status = api.statusJava(addr, port, { query: query, timeout: 5.0 });
+        return status;
     } catch (error) {
-        console.log(`${getTime(new Date())} ${error} (${addr}:${port})`);
-        ret.check = false;
+        log(`${error} (${addr}:${port})`, 'Error');
+        return { online: false };
     }
-    return ret;
-};
+}

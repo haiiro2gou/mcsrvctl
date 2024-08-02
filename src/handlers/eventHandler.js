@@ -1,10 +1,10 @@
-import path, { join, relative } from 'path';
+import path from 'path';
 import { fileURLToPath } from 'url';
 import getAllFiles from '../utils/getAllFiles.cjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default (client) => {
-    const eventFolders = getAllFiles(join(__dirname, '..', 'events'), true);
+    const eventFolders = getAllFiles(path.join(__dirname, '..', 'events'), true);
 
     for (const eventFolder of eventFolders) {
         const eventFiles = getAllFiles(eventFolder);
@@ -13,7 +13,7 @@ export default (client) => {
         const eventName = eventFolder.replace(/\\/g, '/').split('/').pop();
         client.on(eventName, async (arg) => {
             for (const eventFile of eventFiles) {
-                const { default: eventFunction } = await import(relative(__dirname, eventFile).replace(/\\/g, '/'));
+                const { default: eventFunction } = await import(path.relative(__dirname, eventFile).replace(/\\/g, '/'));
                 eventFunction(client, arg);
             }
         });

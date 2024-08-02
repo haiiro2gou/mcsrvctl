@@ -14,7 +14,7 @@ module.exports = (existingCommand, localCommand) => {
             }
         }
         return false;
-    };
+    }
 
     const areOptionsDifferent = (existingOptions, localOptions) => {
         for (const localOption of localOptions) {
@@ -30,26 +30,26 @@ module.exports = (existingCommand, localCommand) => {
                 localOption.description !== existingOption.description ||
                 localOption.type !== existingOption.type ||
                 (localOption.required || false) !== existingOption.required ||
-                (localOption.choices?.length || 0) !==
-                (existingOption.choices?.length || 0) ||
+                (localOption.choices?.length || 0) !== (existingOption.choices?.length || 0) ||
                 areChoicesDifferent(
-                    localOption.choices || [],
-                    existingOption.choices || []
+                    existingOption.choices || [],
+                    localOption.choices || []
                 )
             ) {
                 return true;
             }
         }
+
         return false;
-    };
+    }
 
     if (
-        existingCommand.description !== localCommand.description ||
-        existingCommand.options?.length !== (localCommand.options?.length || 0) ||
+        localCommand.description !== existingCommand.description ||
+        (localCommand.options?.length || 0) !== existingCommand.options?.length ||
         areOptionsDifferent(existingCommand.options, localCommand.options || [])
     ) {
         return true;
     }
 
     return false;
-};
+}
