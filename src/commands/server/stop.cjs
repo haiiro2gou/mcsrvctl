@@ -54,7 +54,7 @@ module.exports = {
             host: process.env.SERVER_IP,
             port: process.env.SERVER_PORT,
             username: process.env.SSH_USER,
-            privateKeyPath: path.join(__dirname, '..', '..', '..', process.env.SSH_PRIVATE),
+            privateKey: process.env.SSH_PRIVATE,
         })
         await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${reply.guild.id} deployment/${target} --replicas=0`);
         ssh.dispose();
