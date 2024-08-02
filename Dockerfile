@@ -6,10 +6,11 @@ ENTRYPOINT ["/sbin/tini", "--"]
 
 WORKDIR /app
 
-COPY --chown=node:node package.json /app/
-RUN npm install
+COPY --chown=node:node package.json ./
+COPY --chown=node:node package-lock.json ./
+RUN npm ci
 
-COPY --chown=node:node src/ /app/
+COPY --chown=node:node src/ ./src/
 
 USER node
 CMD ["node", "src/index.js"]
