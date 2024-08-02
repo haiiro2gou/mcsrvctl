@@ -1,7 +1,6 @@
 const { Client, Interaction, ApplicationCommandOptionType } = require('discord.js');
 
 const config = require('../../../config.json');
-const cache = require('../../../cache.json');
 
 module.exports = {
     /**
@@ -18,14 +17,19 @@ module.exports = {
             name: "target-server",
             description: "The server you want to boot.",
             type: ApplicationCommandOptionType.String,
-            choices: config.guilds.filter(server => server.id === cache.cursor)[0].builds.map(build => ({ name: build.alias, value: build.name })),
+            autocomplete: true,
             required: true,
         },
     ],
     // deleted: Boolean,
 
+    completion: async (client, interaction) => {
+        const focusedValue = interaction.options.getFocused();
+        const choices = config.guilds.find((guild) => guild.id === interaction.guildId).builds.map((build) => ({ name: build.alias, value: build.name }));
+        await interaction.respond(choices.filter((choice) => choice.name.startsWith(focusedValue)));
+    },
+
     callback: async (client, interaction) => {
-        const path = require('path');
         const { NodeSSH } = require('node-ssh');
         const log = require('../../utils/logOutput.cjs');
         const { default: getServerStatus } = await import('../../utils/getServerStatus.js');

@@ -10,7 +10,6 @@ const areCommandsDifferent = require('../../utils/areCommandsDifferent.cjs');
 
 module.exports = async (client) => {
     for (const server of config.guilds) {
-        cache.cursor = server.id;
         fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
         try {
             const localCommands = getLocalCommands(undefined,server);
@@ -70,6 +69,4 @@ module.exports = async (client) => {
             log(err, 'Error');
         }
     }
-    cache.cursor = "";
-    fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
 }
