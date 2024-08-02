@@ -85,7 +85,7 @@ export async function updateServerStatus(client) {
             for (const status of result) {
                 if (status.online) {
                     content += `:green_circle: [${status.name}] ${status.players}/${status.max} Players Online\n`;
-                } else if (guild.builds.find((element) => element.id === status.id)) {
+                } else if (guild.builds.find((element) => element.id === status.id).display) {
                     content += `:red_circle: [${status.name}] -\n`;
                 }
             }
