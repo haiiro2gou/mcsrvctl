@@ -41,9 +41,9 @@ export async function updateServerStatus(client) {
             result.push({
                 name: build.alias,
                 online: status.online,
-                players: status.players?.online || 0,
-                max: status.players?.max || 0,
-                motd: status.motd?.clean.replace(/\n/, ' ') || "-",
+                players: status.data?.players.online || 0,
+                max: status.data?.players.max || 0,
+                motd: status.data?.description.text.replace(/\n/, ' ') || "",
             });
         }
 
