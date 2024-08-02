@@ -70,6 +70,6 @@ module.exports = async (client) => {
             log(err, 'Error');
         }
     }
-    delete cache.cursor;
+    cache.cursor = "";
     fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'cache.json'), JSON.stringify(cache));
 }
