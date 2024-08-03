@@ -34,6 +34,7 @@ export async function filterServerCache() {
 
 export async function updateServerStatus(client) {
     const { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
+    let notifyLog = [];
 
     for (const guild of config.guilds) {
         let result = [];
@@ -54,12 +55,12 @@ export async function updateServerStatus(client) {
             await updateLog(client, guild, result);
         }
 
-        cache.notification = cache.notification.filter((element) => element.id !== guild.id);
-        cache.notification.push({
+        notifyLog.push({
             id: guild.id,
             data: result,
         });
     }
+    cache.notification = notifyLog;
     fs.writeFileSync(path.join(__dirname, '..', '..', 'cache.json'), JSON.stringify(cache));
 }
 
