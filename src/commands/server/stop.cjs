@@ -25,7 +25,7 @@ module.exports = {
 
     completion: async (client, interaction) => {
         const focusedValue = interaction.options.getFocused();
-        const choices = config.guilds.find((guild) => guild.id === interaction.guildId).builds.map((build) => ({ name: build.alias, value: build.name }));
+        const choices = config.guilds.filter((guild) => (guild.id === interaction.guildId || config.testServer.includes(interaction.guildId))).map((guild) => guild.builds).flat().map((build) => ({ name: build.alias, value: build.name }));
         await interaction.respond(choices.filter((choice) => choice.name.startsWith(focusedValue)));
     },
 
@@ -35,21 +35,26 @@ module.exports = {
         const { default: getServerStatus } = await import('../../utils/getServerStatus.js');
 
         await interaction.deferReply();
-        const reply = await interaction.fetchReply();
         const target = await interaction.options.get('target-server').value;
-        const targetName = config.guilds.filter((element) => element.id === reply.guild.id)[0].builds.find((element) => element.name === target).alias;
         const doer = await client.users.fetch(interaction.member.id);
-        log(`[${reply.guild.name}] Server "${targetName}" stop queue from ${doer.username}!`);
 
-        const serverStatus = await getServerStatus(`${target}.${process.env.NAMESPACE}-${config.guilds.filter((element) => element.id === reply.guild.id)[0].id}`);
+        const server = config.guilds.filter((guild) => guild.id === guild.id || config.testServer.includes(guild.id)).map((guild) => guild.builds).flat().find((build) => build.name === target);
+        const guild = config.guilds.find((guild) => guild.builds.some((build) => build.name === target));
+
+        const guildName = await client.guilds.cache.get(guild.id).name;
+
+        log(`[${guildName}] Server "${server.alias}" stop queue from ${doer.username}!`);
+
+        const serverStatus = await getServerStatus(`${target}.${process.env.NAMESPACE}-${guild.id}`);
+
         if (!serverStatus.online) {
             await interaction.editReply(`This server seems to be offline!`);
-            log(`[${reply.guild.name}] Server "${targetName}" is already offline!`, 'Warn');
+            log(`[${guildName}] Server "${server.alias}" is already offline!`, 'Warn');
             return;
         }
         if (serverStatus.online && serverStatus.data.players.online !== 0) {
-            await interaction.editReply(`This server appears to have ${serverStatus.players.online} online player(s) connected to it!`);
-            log(`[${reply.guild.name}] Server "${targetName}" have ${serverStatus.players.online} online player(s)!`, 'Warn');
+            await interaction.editReply(`This server appears to have ${serverStatus.data.players.online} online player(s) connected to it!`);
+            log(`[${guildName}] Server "${server.alias}" have ${serverStatus.data.players.online} online player(s)!`, 'Warn');
             return;
         }
 
@@ -60,8 +65,8 @@ module.exports = {
             username: process.env.SSH_USER,
             privateKey: process.env.SSH_PRIVATE,
         })
-        await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${reply.guild.id} deployment/${target} --replicas=0`);
+        await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${guild.id} deployment/${target} --replicas=0`);
         ssh.dispose();
-        await interaction.editReply(`Server "${targetName}" stop queued!`);
+        await interaction.editReply(`Server "${server.alias}" stop queued!`);
     }
 }
