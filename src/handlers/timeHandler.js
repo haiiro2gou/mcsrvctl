@@ -36,9 +36,7 @@ export async function updateServerStatus(client) {
     const { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
 
     for (const guild of config.guilds) {
-        const current = cache.notification.find((element) => element.id === guild.id) || { id: guild.id, data: [] };
         let result = [];
-
         for (const build of guild.builds) {
             const status = await getServerStatus(`${build.name}.${process.env.NAMESPACE}-${guild.id}`);
             result.push({
@@ -50,58 +48,10 @@ export async function updateServerStatus(client) {
             });
         }
 
-        let check = true;
-        if (!current.data.length ||
-            !result.length ||
-            current.data.length !== result.length
-        ) {
-            check = false;
-        }
-        if (check) {
-            for (const status of result) {
-                if (!current.data.some((element) => element.name === status.name)) {
-                    check = false;
-                    break;
-                }
-                const c = current.data.find((element) => element.name === status.name);
-                if (
-                    c.name !== status.name ||
-                    c.online !== status.online ||
-                    c.players !== status.players ||
-                    c.max !== status.max // ||
-                    // c.motd !== status.motd
-                ) {
-                    check = false;
-                    break;
-                }
-            }
-        }
-
-        if (!check) {
-            const guildName = await client.guilds.cache.get(guild.id).name;
-            log(`[${guildName}] Server data has been updated!`);
-
-            let content = `## Server Status\n\`\`\`${process.env.IP_ALIAS}\`\`\`\n`;
-            for (const status of result) {
-                if (status.online) {
-                    content += `:green_circle: [${status.name}] ${status.players}/${status.max} Players Online\n`;
-                } else if (guild.builds.find((element) => element.id === status.id).display) {
-                    content += `:red_circle: [${status.name}] -\n`;
-                }
-            }
-            content += `\nLast Update: ${new Date().toString()}\n`;
-
-            for (const notifyId of guild.notification) {
-                const channel = await client.channels.fetch(`${notifyId}`);
-                const messages = await channel.messages.fetch({ limit: 25 });
-                const target = messages.find((message) => message.author.id === process.env.APP_ID);
-
-                if (target !== undefined) {
-                    target.edit(content);
-                } else {
-                    channel.send(content);
-                }
-            }
+        if (config.testServer.includes(guild.id)) {
+            await updateLog(client, guild, cache.notification.map((element) => element.data).flat());
+        } else {
+            await updateLog(client, guild, result);
         }
 
         cache.notification = cache.notification.filter((element) => element.id !== guild.id);
@@ -111,4 +61,58 @@ export async function updateServerStatus(client) {
         });
     }
     fs.writeFileSync(path.join(__dirname, '..', '..', 'cache.json'), JSON.stringify(cache));
+}
+
+async function updateLog(client, guild, status) {
+    let { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
+    const current = cache.notification.filter((element) => element.id === guild.id || config.testServer.includes(guild.id)).map((element) => element.data).flat();
+
+    let check = true;
+    if (current.length !== status.length) check = false;
+    for (const data of status) {
+        if (!current.some((element) => element.name === data.name)) {
+            check = false;
+            break;
+        }
+        const compr = current.find((element) => element.name === data.name);
+        if (
+            compr.name !== data.name ||
+            compr.online !== data.online ||
+            compr.players !== data.players ||
+            compr.max !== data.max // ||
+            // compr.motd !== data.motd
+        ) {
+            check = false;
+            break;
+        }
+    }
+
+    if (!check) {
+        const guildName = await client.guilds.cache.get(guild.id).name;
+        log(`[${guildName}] Server data has been updated!`);
+
+        let content = `## Server Status\n\`\`\`${process.env.IP_ALIAS}\`\`\`\n`;
+        for (const data of status) {
+            if (data.online) {
+                content += `:green_circle: [${data.name}] ${data.players}/${data.max} Players Online\n`;
+            } else if (guild.builds.find((element) => element.id === data.id).display) {
+                content += `:red_circle: [${data.name}] -\n`;
+            }
+        }
+        content += `\nLast Update: ${new Date().toString()}\n`;
+
+        for (const notifyId of guild.notification) {
+            const channel = await client.channels.fetch(`${notifyId}`);
+            const messages = await channel.messages.fetch({ limit: 25 });
+            const target = messages.find((message) => message.author.id === process.env.APP_ID);
+
+            if (target !== undefined) {
+                target.edit(content);
+            } else {
+                channel.send(content);
+            }
+        }
+    }
+
+    return check;
 }
