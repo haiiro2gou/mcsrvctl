@@ -29,7 +29,7 @@ module.exports = async (client, interaction) => {
             // disabled due to no registration.
             /*
             if (commandObject.testOnly) {
-                if (!(interaction.guild.id === config.testServer)) {
+                if (!(config.testServer.includes(interaction.guild.id))) {
                     interaction.reply({
                         content: 'This command cannot be ran here.',
                         ephemeral: true,

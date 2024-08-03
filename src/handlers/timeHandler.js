@@ -49,9 +49,7 @@ export async function updateServerStatus(client) {
             });
         }
 
-        if (config.testServer.includes(guild.id)) {
-            await updateLog(client, guild, cache.notification.map((element) => element.data).flat());
-        } else {
+        if (!config.testServer.includes(guild.id)) {
             await updateLog(client, guild, result);
         }
 
@@ -60,6 +58,11 @@ export async function updateServerStatus(client) {
             data: result,
         });
     }
+
+    for (const guild of config.guilds.filter((element) => element.notification.some((element) => config.testServer.includes(element)))) {
+        await updateLog(client, guild, notifyLog.map((element) => element.data).flat());
+    }
+
     cache.notification = notifyLog;
     fs.writeFileSync(path.join(__dirname, '..', '..', 'cache.json'), JSON.stringify(cache));
 }

@@ -12,7 +12,9 @@
             "builds": []
         }
     ],
-    "testServer": "Your_Test_server_Id",
+    "testServer": [
+        "Your_Test_server_Id"
+    ],
     "devs": [
         "Developer_Id_1",
         "Developer_Id_2"

@@ -27,7 +27,7 @@ module.exports = async (client) => {
                         localCommand.deleted ||
                         (
                             localCommand.testOnly &&
-                            server.id !== config.testServer
+                            !config.testServer.includes(server.id)
                         )
                     ) {
                         await applicationCommands.delete(existingCommand.id);
@@ -50,7 +50,7 @@ module.exports = async (client) => {
 
                     if (
                         localCommand.testOnly &&
-                        server.id !== config.testServer
+                        !config.testServer.includes(server.id)
                     ) {
                         continue;
                     }
