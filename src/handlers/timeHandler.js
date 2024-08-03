@@ -89,7 +89,7 @@ export async function updateServerStatus(client) {
                     content += `:red_circle: [${status.name}] -\n`;
                 }
             }
-            content += `\nLast Update: ${new Date().toString()}\n`
+            content += `\nLast Update: ${new Date().toString()}\n`;
 
             for (const notifyId of guild.notification) {
                 const channel = await client.channels.fetch(`${notifyId}`);
