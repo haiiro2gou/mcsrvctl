@@ -59,7 +59,7 @@ export async function updateServerStatus(client) {
         });
     }
 
-    for (const guild of config.guilds.filter((element) => element.notification.some((element) => config.testServer.includes(element)))) {
+    for (const guild of config.guilds.filter((element) => config.testServer.includes(element.id))) {
         await updateLog(client, guild, notifyLog.map((element) => element.data).flat());
     }
 
@@ -117,6 +117,4 @@ async function updateLog(client, guild, status) {
             }
         }
     }
-
-    return check;
 }
