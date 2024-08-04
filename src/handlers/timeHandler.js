@@ -92,8 +92,8 @@ async function updateLog(client, guild, status) {
             data.update = new Date().toString();
             continue;
         }
-        if (data.online && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
-            log(`Server "${data.name}" stop queued!`);
+        if (data.online && !data.players && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
+            log(`Server "${data.name}" stop queued due to inactiveness!`);
 
             const ssh = new NodeSSH();
             await ssh.connect({
@@ -109,7 +109,7 @@ async function updateLog(client, guild, status) {
 
     if (!check) {
         const guildName = await client.guilds.cache.get(guild.id).name;
-        log(`[${guildName}] Server data has been updated due to inactiveness!`);
+        log(`[${guildName}] Server data has been updated!`);
 
         let content = `## Server Status\n\`\`\`${process.env.IP_ALIAS}\`\`\`\n`;
         for (const data of status) {
