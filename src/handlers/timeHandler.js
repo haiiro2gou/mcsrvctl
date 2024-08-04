@@ -99,7 +99,7 @@ async function updateLog(client, guild, status) {
         for (const data of status) {
             if (data.online) {
                 content += `:green_circle: [${data.name}] ${data.players}/${data.max} Players Online\n`;
-            } else if (guild.builds.find((element) => element.id === data.id).display) {
+            } else if (config.guilds.find((element) => element.builds.some((build) => build.alias === data.name)).builds.find((element) => element.alias === data.name).display) {
                 content += `:red_circle: [${data.name}] -\n`;
             }
         }
