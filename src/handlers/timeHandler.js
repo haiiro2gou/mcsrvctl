@@ -43,8 +43,8 @@ export async function updateServerStatus(client) {
             result.push({
                 name: build.alias,
                 online: status.online,
-                players: status.data?.players.online || 0,
-                max: status.data?.players.max || 0,
+                players: status.data?.players?.online || 0,
+                max: status.data?.players?.max || 0,
                 // motd: status.data?.description.text.replace(/\n/, ' ') || "",
             });
         }
@@ -76,9 +76,11 @@ async function updateLog(client, guild, status) {
     for (const data of status) {
         if (!current.some((element) => element.name === data.name)) {
             check = false;
-            break;
+            data.update = new Date().toString();
+            continue;
         }
         const compr = current.find((element) => element.name === data.name);
+        data.update = compr.update;
         if (
             compr.name !== data.name ||
             compr.online !== data.online ||
@@ -87,7 +89,21 @@ async function updateLog(client, guild, status) {
             // compr.motd !== data.motd
         ) {
             check = false;
-            break;
+            data.update = new Date().toString();
+            continue;
+        }
+        if (data.online && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
+            log(`Server "${data.name}" stop queued!`);
+
+            const ssh = new NodeSSH();
+            await ssh.connect({
+                host: process.env.SERVER_IP,
+                port: process.env.SERVER_PORT,
+                username: process.env.SSH_USER,
+                privateKey: process.env.SSH_PRIVATE,
+            });
+            await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${guild.id} deployment/${config.guilds.find((element) => element.id === guild.id).builds.find((element) => element.alias === data.name).name} --replicas=0`);
+            ssh.dispose();
         }
     }
 
