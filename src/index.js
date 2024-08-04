@@ -40,7 +40,7 @@ eventHandler(client);
 cron.schedule('*/10 * * * * *', async () => {
     queueProcess();
 });
-cron.schedule('*/15 * * * * *', async () => {
+cron.schedule('0 * * * * *', async () => {
     updateServerStatus(client);
 });
 cron.schedule('0 0 5 * * *', async () => {
