@@ -109,7 +109,7 @@ async function updateLog(client, guild, status) {
 
     if (!check) {
         const guildName = await client.guilds.cache.get(guild.id).name;
-        log(`[${guildName}] Server data has been updated!`);
+        log(`[${guildName}] Server data has been updated due to inactiveness!`);
 
         let content = `## Server Status\n\`\`\`${process.env.IP_ALIAS}\`\`\`\n`;
         for (const data of status) {
