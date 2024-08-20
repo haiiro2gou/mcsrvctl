@@ -70,26 +70,30 @@ export async function updateServerStatus(client) {
 }
 
 async function statusCheck(client, guild, status) {
-    for (const data of status) {
-        if (data.online && !data.players && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
-            log(`Server "${data.name}" stop queued due to inactiveness!`);
+    const current = (await import('../../cache.json', { assert: { type: "json" } })).notification.filter((element) => element.id === guild.id || config.testServer.includes(guild.id)).map((element) => element.data).flat();
 
-            const ssh = new NodeSSH();
-            await ssh.connect({
-                host: process.env.SERVER_IP,
-                port: process.env.SERVER_PORT,
-                username: process.env.SSH_USER,
-                privateKey: process.env.SSH_PRIVATE,
-            });
-            await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${guild.id} deployment/${config.guilds.find((element) => element.id === guild.id).builds.find((element) => element.alias === data.name).name} --replicas=0`);
-            ssh.dispose();
+    for (const data of status) {
+        if (current.some((element) => element.name === data.name)) {
+            const compr = current.find((element) => element.name === data.name);
+            if (data.online && compr.update && !data.players && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
+                log(`Server "${data.name}" stop queued due to inactiveness!`);
+
+                const ssh = new NodeSSH();
+                await ssh.connect({
+                    host: process.env.SERVER_IP,
+                    port: process.env.SERVER_PORT,
+                    username: process.env.SSH_USER,
+                    privateKey: process.env.SSH_PRIVATE,
+                });
+                await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${guild.id} deployment/${config.guilds.find((element) => element.id === guild.id).builds.find((element) => element.alias === data.name).name} --replicas=0`);
+                ssh.dispose();
+            }
         }
     }
 }
 
 async function updateLog(client, guild, status) {
-    let { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
-    const current = cache.notification.filter((element) => element.id === guild.id || config.testServer.includes(guild.id)).map((element) => element.data).flat();
+    const current = (await import('../../cache.json', { assert: { type: "json" } })).notification.filter((element) => element.id === guild.id || config.testServer.includes(guild.id)).map((element) => element.data).flat();
 
     let check = true;
     if (current.length !== status.length) check = false;
