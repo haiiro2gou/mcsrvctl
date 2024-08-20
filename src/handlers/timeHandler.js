@@ -49,9 +49,7 @@ export async function updateServerStatus(client) {
             });
         }
 
-        if (!config.testServer.includes(guild.id)) {
-            await updateLog(client, guild, result);
-        }
+        await statusCheck(client, guild, result);
 
         notifyLog.push({
             id: guild.id,
@@ -59,12 +57,34 @@ export async function updateServerStatus(client) {
         });
     }
 
-    for (const guild of config.guilds.filter((element) => config.testServer.includes(element.id))) {
-        await updateLog(client, guild, notifyLog.map((element) => element.data).flat());
+    for (const guild of config.guilds) {
+        if (config.testServer.includes(guild.id)) {
+            await updateLog(client, guild, notifyLog.map((element) => element.data).flat());
+        } else {
+            await updateLog(client, guild, notifyLog.find((element) => element.id === guild.id).data);
+        }
     }
 
     cache.notification = notifyLog;
     fs.writeFileSync(path.join(__dirname, '..', '..', 'cache.json'), JSON.stringify(cache));
+}
+
+async function statusCheck(client, guild, status) {
+    for (const data of status) {
+        if (data.online && !data.players && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
+            log(`Server "${data.name}" stop queued due to inactiveness!`);
+
+            const ssh = new NodeSSH();
+            await ssh.connect({
+                host: process.env.SERVER_IP,
+                port: process.env.SERVER_PORT,
+                username: process.env.SSH_USER,
+                privateKey: process.env.SSH_PRIVATE,
+            });
+            await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${guild.id} deployment/${config.guilds.find((element) => element.id === guild.id).builds.find((element) => element.alias === data.name).name} --replicas=0`);
+            ssh.dispose();
+        }
+    }
 }
 
 async function updateLog(client, guild, status) {
@@ -79,6 +99,7 @@ async function updateLog(client, guild, status) {
             data.update = new Date().toString();
             continue;
         }
+
         const compr = current.find((element) => element.name === data.name);
         data.update = compr.update;
         if (
@@ -91,19 +112,6 @@ async function updateLog(client, guild, status) {
             check = false;
             data.update = new Date().toString();
             continue;
-        }
-        if (data.online && !data.players && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
-            log(`Server "${data.name}" stop queued due to inactiveness!`);
-
-            const ssh = new NodeSSH();
-            await ssh.connect({
-                host: process.env.SERVER_IP,
-                port: process.env.SERVER_PORT,
-                username: process.env.SSH_USER,
-                privateKey: process.env.SSH_PRIVATE,
-            });
-            await ssh.execCommand(`kubectl scale -n ${process.env.NAMESPACE}-${guild.id} deployment/${config.guilds.find((element) => element.id === guild.id).builds.find((element) => element.alias === data.name).name} --replicas=0`);
-            ssh.dispose();
         }
     }
 
