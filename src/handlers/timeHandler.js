@@ -70,7 +70,8 @@ export async function updateServerStatus(client) {
 }
 
 async function statusCheck(client, guild, status) {
-    const current = (await import('../../cache.json', { assert: { type: "json" } })).notification.filter((element) => element.id === guild.id || config.testServer.includes(guild.id)).map((element) => element.data).flat();
+    let { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
+    const current = cache.notification.filter((element) => element.id === guild.id).map((element) => element.data).flat();
 
     for (const data of status) {
         if (current.some((element) => element.name === data.name)) {
@@ -93,7 +94,8 @@ async function statusCheck(client, guild, status) {
 }
 
 async function updateLog(client, guild, status) {
-    const current = (await import('../../cache.json', { assert: { type: "json" } })).notification.filter((element) => element.id === guild.id || config.testServer.includes(guild.id)).map((element) => element.data).flat();
+    let { default: cache } = await import('../../cache.json', { assert: { type: "json" } });
+    const current = cache.notification.filter((element) => element.id === guild.id || config.testServer.includes(guild.id)).map((element) => element.data).flat();
 
     let check = true;
     if (current.length !== status.length) check = false;
