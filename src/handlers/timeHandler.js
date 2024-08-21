@@ -49,8 +49,6 @@ export async function updateServerStatus(client) {
             });
         }
 
-        await statusCheck(client, guild, result);
-
         notifyLog.push({
             id: guild.id,
             data: result,
@@ -65,6 +63,10 @@ export async function updateServerStatus(client) {
         }
     }
 
+    for (const guild of config.guilds) {
+        await statusCheck(client, guild, notifyLog.find((element) => element.id === guild.id).data);
+    }
+
     cache.notification = notifyLog;
     fs.writeFileSync(path.join(__dirname, '..', '..', 'cache.json'), JSON.stringify(cache));
 }
@@ -76,7 +78,7 @@ async function statusCheck(client, guild, status) {
     for (const data of status) {
         if (current.some((element) => element.name === data.name)) {
             const compr = current.find((element) => element.name === data.name);
-            if (data.online && compr.update && !data.players && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
+            if (data.online && compr.online && compr.update && !data.players && (new Date() - new Date(compr.update)) / 1000 / 60 / 60 >= 1) {
                 log(`Server "${data.name}" stop queued due to inactiveness!`);
 
                 const ssh = new NodeSSH();
