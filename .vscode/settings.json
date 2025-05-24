@@ -1,16 +1,15 @@
 {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
     "files.eol": "\n",
-    "githubIssues.ignoreCompletionTrigger": [
-        "javascript"
-    ],
-    "git.branchProtection": [
-        "master"
-    ],
+    "githubIssues.ignoreCompletionTrigger": ["javascript"],
+    "git.branchProtection": ["master"],
     "git.branchProtectionPrompt": "alwaysPrompt",
     "git-graph.customEmojiShortcodeMappings": [
         {
             "shortcode": ":technologist:",
             "emoji": "🧑‍💻"
-        },
-    ],
+        }
+    ]
 }

@@ -1,28 +1,62 @@
 {
-	"name": "mcsrvctl",
-	"version": "2.0.0",
-	"description": "Enables to boot Minecraft servers from Discord!",
-	"main": "src/index.js",
-	"type": "module",
-	"scripts": {
-		"start": "node src/index.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/haiiro2gou/mcsrvctl.git"
-	},
-	"author": "haiiro2gou",
-	"license": "Apache-2.0",
-	"bugs": {
-		"url": "https://github.com/haiiro2gou/mcsrvctl/issues"
-	},
-	"homepage": "https://github.com/haiiro2gou/mcsrvctl#readme",
-	"dependencies": {
-		"discord.js": "^14.15.2",
-		"dotenv": "^16.4.5",
-		"minecraft-status": "^1.1.0",
-		"node-cron": "^3.0.3",
-		"node-ssh": "^13.2.0"
-	}
+  "name": "mcsrvctl",
+  "version": "2.0.0",
+  "description": "Enables to boot Minecraft servers from Discord!",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "dev:watch": "ts-node-dev --respawn src/index.ts",
+    "clean": "rimraf dist/",
+    "tsc": "tsc",
+    "build": "npm-run-all clean tsc",
+    "start": "node .",
+    "check-types": "tsc --noEmit",
+    "eslint": "eslint src/**/*.ts",
+    "eslint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write 'src/**/*.{js,ts,json}'",
+    "lint": "npm-run-all eslint check-types",
+    "lint:fix": "npm-run-all eslint:fix check-types format",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haiiro2gou/mcsrvctl.git"
+  },
+  "author": "haiiro2gou <mrashen.2gou@gmail.com>",
+  "license": "MIT License",
+  "bugs": {
+    "url": "https://github.com/haiiro2gou/mcsrvctl/issues"
+  },
+  "homepage": "https://github.com/haiiro2gou/mcsrvctl#readme",
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.15.0",
+    "@stylistic/eslint-plugin": "^2.11.0",
+    "@types/node": "^22.9.3",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "9.1.0",
+    "globals": "^15.12.0",
+    "husky": "^9.1.7",
+    "npm-run-all": "^4.1.5",
+    "prettier": "3.3.3",
+    "rimraf": "^5.0.10",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.2"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --cache --fix",
+    "*.ts": "bash -c 'tsc --noEmit'",
+    "*.{js,ts,json}": "prettier --write",
+    "*.js": "eslint --cache --fix"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "minecraft-status": "^1.1.0",
+    "node-cron": "^3.0.3",
+    "node-ssh": "^13.2.0"
+  }
 }

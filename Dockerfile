@@ -10,7 +10,7 @@ COPY --chown=node:node package.json ./
 COPY --chown=node:node package-lock.json ./
 RUN npm ci
 
-COPY --chown=node:node src/ ./src/
+COPY --chown=node:node dist/ ./dist/
 
 USER node
-CMD ["node", "src/index.js"]
+CMD ["node", "dist/index.js"]
