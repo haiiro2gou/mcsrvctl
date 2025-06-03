@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "include": [
     "src/**/*.ts",
-    "eslint.config.mjs"
+    "eslint.config.js"
   ],
   "exclude": [
     "node_modules",
