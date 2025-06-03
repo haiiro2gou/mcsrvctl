@@ -73,9 +73,6 @@ typings/
 .husky
 dist
 package-lock.json
-input
-output
 
 config.json
 cache.json
-private_key
