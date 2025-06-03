@@ -9,8 +9,9 @@ indent_style = space
 trim_trailing_whitespace = true
 
 [*.{md,markdown}]
-insert_final_newline = false
+insert_final_newline = true
 trim_trailing_whitespace = false
 
 [*.json]
 insert_final_newline = false
+trim_trailing_whitespace = true
