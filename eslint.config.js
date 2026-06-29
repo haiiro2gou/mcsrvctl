@@ -11,6 +11,7 @@ const compat = new FlatCompat({
 });
 
 export default [
+    { ignores: ["eslint.config.js"] },
     ...compat.extends(
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -33,6 +34,16 @@ export default [
                 project: ["./tsconfig.eslint.json"],
             },
         },
-        ignores: ["eslint.config.js"],
+    },
+    {
+        files: ["**/*.ts"],
+        rules: {
+            "no-undef": "off",
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                { argsIgnorePattern: "^_" },
+            ],
+        },
     },
 ];
