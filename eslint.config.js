@@ -27,7 +27,7 @@ export default [
                 ...globals.node,
             },
             parser: tsParser,
-            ecmaVersion: 2019,
+            ecmaVersion: 2023,
             sourceType: "module",
             parserOptions: {
                 projectService: true,
@@ -38,8 +38,6 @@ export default [
     {
         files: ["**/*.ts"],
         rules: {
-            "no-undef": "off",
-            "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 { argsIgnorePattern: "^_" },
