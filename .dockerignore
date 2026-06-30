@@ -1,7 +1,50 @@
+# Git
 .git
-node_modules
-.editorconfig
-.env.example
+.gitattributes
 .gitignore
-config-example.json
+.github
+
+# Editor / IDE
+.vscode
+.idea
+.editorconfig
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules
+dist
+*.tsbuildinfo
+npm-debug.log*
+.npm
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Lint / Format
+eslint.config.js
+tsconfig.eslint.json
+.prettierrc.json
+.prettierignore
+.eslintcache
+
+# Husky
+.husky
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Document
 README.md
+LICENSE
+docs
+
+# Template
+config-example.json
+inventory.example.json
+*.example
