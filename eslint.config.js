@@ -15,7 +15,7 @@ export default [
     ...compat.extends(
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/recommended-type-checked",
         "prettier"
     ),
     ...essentials,
@@ -30,8 +30,8 @@ export default [
             ecmaVersion: 2019,
             sourceType: "module",
             parserOptions: {
+                projectService: true,
                 tsconfigRootDir: import.meta.dirname,
-                project: ["./tsconfig.eslint.json"],
             },
         },
     },

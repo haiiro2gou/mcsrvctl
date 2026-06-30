@@ -24,7 +24,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.39.4",
-    "@haiiro2gou/eslint-config": "^1.3.2",
+    "@haiiro2gou/eslint-config": "^1.5.3",
     "@types/node": "^22.20.0",
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
