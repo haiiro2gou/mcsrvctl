@@ -1,0 +1,20 @@
+services:
+    workspace:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: sleep infinity
+        volumes:
+            - ..:/workspaces/mcsrvctl:cached
+            - node-modules:/workspaces/mcsrvctl/node_modules
+            # Claude Code and Codex logins survive rebuilds.
+            - claude-config:/home/vscode/.claude
+            - codex-home:/home/vscode/.codex
+        environment:
+            # Keeps ~/.claude.json (login state) inside the claude-config volume, as in the official devcontainer.
+            CLAUDE_CONFIG_DIR: /home/vscode/.claude
+
+volumes:
+    node-modules:
+    claude-config:
+    codex-home:
