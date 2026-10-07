@@ -9,7 +9,8 @@
 ## 開発環境
 
 - build・lint・依存の更新は devcontainer (`.devcontainer/`、Node 22) の中で行う。VS Code を使わないときは `npx @devcontainers/cli up --workspace-folder .` で起動し、`npx @devcontainers/cli exec --workspace-folder . <command>` で実行する。
-- container の `node_modules` は named volume なので、host の `node_modules` とは別物になる。pre-commit (husky + lint-staged) は host で走るため、依存を変えたら host でも `npm ci` する。
+- host には Node も `node_modules` も置かない。container の `node_modules` は named volume なので、`npm ci` は container の中でだけ行う。
+- pre-commit (husky + lint-staged) は、host で動くと `docker compose -p mcsrvctl_devcontainer exec` で container の中に処理を渡す。コミットの前に container を起動しておく。container の中かどうかは、`compose.yaml` で設定した `IN_DEVCONTAINER` で判定する。
 - `npm run dev` は `tsx watch` で `src/index.ts` を動かす。`.env` があれば読む。
 
 ## 過去に起きた問題
