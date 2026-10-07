@@ -1,23 +1,14 @@
-import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import { essentials, node, typescript } from "@haiiro2gou/eslint-config";
+import prettier from "eslint-config-prettier";
 import globals from "globals";
-import tsParser from "@typescript-eslint/parser";
-
-const compat = new FlatCompat({
-    baseDirectory: import.meta.dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
+import tseslint from "typescript-eslint";
 
 export default [
     { ignores: ["eslint.config.js"] },
-    ...compat.extends(
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-type-checked",
-        "prettier"
-    ),
+    js.configs.recommended,
+    ...tseslint.configs.recommendedTypeChecked,
+    prettier,
     ...essentials,
     ...node,
     ...typescript,
@@ -26,7 +17,6 @@ export default [
             globals: {
                 ...globals.node,
             },
-            parser: tsParser,
             ecmaVersion: 2023,
             sourceType: "module",
             parserOptions: {
