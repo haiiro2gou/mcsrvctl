@@ -13,6 +13,8 @@ services:
         environment:
             # Keeps ~/.claude.json (login state) inside the claude-config volume, as in the official devcontainer.
             CLAUDE_CONFIG_DIR: /home/vscode/.claude
+            # Read by .husky/pre-commit to tell the container from the host.
+            IN_DEVCONTAINER: "1"
 
 volumes:
     node-modules:
