@@ -1,8 +1,8 @@
 import { type Client } from "discord.js";
 
 import path from "path";
-import { getAllFiles } from "../util/io";
-import log from "../util/log";
+import { getAllFiles } from "../util/io.js";
+import log from "../util/log.js";
 
 export default (client: Client) => {
     const eventFolders = [
