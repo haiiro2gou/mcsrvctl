@@ -17,7 +17,6 @@ WORKDIR /app
 COPY --chown=node:node package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev --no-audit --no-fund
- && npm cache clean --force
 COPY --chown=node:node --from=builder /build/dist ./dist/
 USER node
 ENTRYPOINT ["/sbin/tini", "--"]
