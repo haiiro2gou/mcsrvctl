@@ -16,7 +16,7 @@ RUN apk add --no-cache tini=~0.19
 WORKDIR /app
 COPY --chown=node:node package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev --no-audit --no-fund
+    npm ci --omit=dev --no-audit --no-fund --ignore-scripts
 COPY --chown=node:node --from=builder /build/dist ./dist/
 USER node
 ENTRYPOINT ["/sbin/tini", "--"]
