@@ -14,7 +14,7 @@
     "features": {
         // Same major version as the runtime image in the root Dockerfile.
         "ghcr.io/devcontainers/features/node:1": {
-            "version": "22"
+            "version": "24"
         },
         "ghcr.io/devcontainers/features/github-cli:1": {},
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}

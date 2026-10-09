@@ -4,6 +4,9 @@
   "description": "Enables to boot Minecraft servers from Discord!",
   "type": "module",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
     "clean": "rimraf dist/* --glob",
@@ -28,7 +31,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@haiiro2gou/eslint-config": "^2.0.0",
-    "@types/node": "^22.20.0",
+    "@types/node": "^24.19.1",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.13.0",
