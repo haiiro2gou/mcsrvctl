@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:22.11-alpine AS builder
+FROM node:24.21-alpine AS builder
 WORKDIR /build
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
@@ -9,7 +9,7 @@ COPY src/ ./src/
 RUN npm run build
 
 # Stage 2: Runtime
-FROM node:22.11-alpine AS runtime
+FROM node:24.21-alpine AS runtime
 ENV NODE_ENV=production
 ENV NODE_OPTIONS=--enable-source-maps
 RUN apk add --no-cache tini=~0.19
