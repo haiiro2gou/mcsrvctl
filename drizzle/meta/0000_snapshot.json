@@ -1,0 +1,85 @@
+{
+    "version": "6",
+    "dialect": "sqlite",
+    "id": "282cf26d-74b5-4293-a508-b91cd46a7f7f",
+    "prevId": "00000000-0000-0000-0000-000000000000",
+    "tables": {
+        "build": {
+            "name": "build",
+            "columns": {
+                "guild_id": {
+                    "name": "guild_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "alias": {
+                    "name": "alias",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {
+                "build_guild_id_name_pk": {
+                    "columns": ["guild_id", "name"],
+                    "name": "build_guild_id_name_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "notify_channel": {
+            "name": "notify_channel",
+            "columns": {
+                "guild_id": {
+                    "name": "guild_id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "channel_id": {
+                    "name": "channel_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "message_id": {
+                    "name": "message_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        }
+    },
+    "views": {},
+    "enums": {},
+    "_meta": {
+        "schemas": {},
+        "tables": {},
+        "columns": {}
+    },
+    "internal": {
+        "indexes": {}
+    }
+}

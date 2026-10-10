@@ -1,16 +1,24 @@
-FROM node:20.16-alpine3.19
-ENV NODE_ENV production
+# Stage 1: Build
+FROM node:24.21-alpine AS builder
+WORKDIR /build
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --no-audit --no-fund
+COPY tsconfig.json tsconfig.build.json ./
+COPY src/ ./src/
+RUN npm run build
 
-RUN apk add --no-cache tini
-ENTRYPOINT ["/sbin/tini", "--"]
-
+# Stage 2: Runtime
+FROM node:24.21-alpine AS runtime
+ENV NODE_ENV=production
+ENV NODE_OPTIONS=--enable-source-maps
+RUN apk add --no-cache tini=~0.19
 WORKDIR /app
-
-COPY --chown=node:node package.json ./
-COPY --chown=node:node package-lock.json ./
-RUN npm ci
-
-COPY --chown=node:node src/ ./src/
-
+COPY --chown=node:node package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --omit=dev --no-audit --no-fund --ignore-scripts
+COPY --chown=node:node --from=builder /build/dist ./dist/
+COPY --chown=node:node drizzle/ ./drizzle/
 USER node
-CMD ["node", "src/index.js"]
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "dist/index.js"]

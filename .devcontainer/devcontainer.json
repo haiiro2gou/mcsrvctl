@@ -1,0 +1,36 @@
+{
+    "name": "mcsrvctl",
+    "dockerComposeFile": ["compose.yaml", "compose.local.yaml"],
+    "initializeCommand": [
+        "sh",
+        "-c",
+        "if [ ! -e \"$1\" ]; then printf 'services: {}' > \"$1\"; fi",
+        "--",
+        "${localWorkspaceFolder}/.devcontainer/compose.local.yaml"
+    ],
+    "service": "workspace",
+    "workspaceFolder": "/workspaces/mcsrvctl",
+    "remoteUser": "vscode",
+    "features": {
+        // Same major version as the runtime image in the root Dockerfile.
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "24"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    },
+    "postCreateCommand": "bash .devcontainer/postCreate.sh",
+    "postStartCommand": "if [ -f .devcontainer/postStart.local.sh ]; then bash .devcontainer/postStart.local.sh; fi",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "usernamehw.errorlens",
+                "EditorConfig.EditorConfig",
+                "ms-azuretools.vscode-containers",
+                "anthropic.claude-code"
+            ]
+        }
+    }
+}

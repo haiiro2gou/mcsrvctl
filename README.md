@@ -3,26 +3,17 @@
 Enables to boot Minecraft servers from Discord!  
 (In short, it's a Discord bot.)
 
+[![stars](https://img.shields.io/github/stars/haiiro2gou/mcsrvctl?logo=github)](https://github.com/haiiro2gou/mcsrvctl/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-%23F7DF1E?logo=mit&logoColor=black)](LICENSE)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
+
 ## How to Use
 
-1. Clone this repo.
-2. Run server/install.sh (for Windows, server/install.bat).
-3. Fill in [.env](.env.example) and [config.json](config-example.json) entries.
-4. Run the command (requires node.js): `node src/index.js`.
-
-> The server folder is prepared with a _minimum_ configuration of hub server and proxy server folders. If you want to add more servers, you can create new server folders in the temp and (or) event folders.
-
-## Commands
-
-- `/ping` will send a ping to the bot.
-- `/start 'target-server'` will starts the specified server.
-- `/stop 'target-server'` will stops the specified server.
-
-## Others
+WIP
 
 ### License
 
-This repository is licensed under [Apache-2.0 License](LICENSE).
+This repository is licensed under [MIT License](LICENSE).
 
 ### Contact
 
