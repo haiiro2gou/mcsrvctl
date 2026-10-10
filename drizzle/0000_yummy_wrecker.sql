@@ -5,7 +5,6 @@ CREATE TABLE `build` (
 	PRIMARY KEY(`guild_id`, `name`)
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `build_guild_id_alias_unique` ON `build` (`guild_id`,`alias`);--> statement-breakpoint
 CREATE TABLE `notify_channel` (
 	`guild_id` text PRIMARY KEY NOT NULL,
 	`channel_id` text NOT NULL,

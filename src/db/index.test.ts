@@ -8,16 +8,6 @@ import { eq } from "drizzle-orm";
 import { backup, openDb } from "./index.js";
 import { build, notifyChannel } from "./schema.js";
 
-// Drizzle wraps driver errors; the SQLite code sits on the cause
-const sqliteCode = (e: unknown): string | undefined => {
-    const cause = e instanceof Error && e.cause instanceof Error ? e.cause : e;
-    return cause instanceof Error &&
-        "code" in cause &&
-        typeof cause.code === "string"
-        ? cause.code
-        : undefined;
-};
-
 void test("migrate creates the tables in a fresh database", () => {
     const db = openDb(":memory:");
     const tables = db.$client
@@ -53,23 +43,18 @@ void test("build rows are scoped to their guild", () => {
     db.$client.close();
 });
 
-void test("alias is unique within a guild", () => {
+void test("the same alias may be used by several builds in a guild", () => {
     const db = openDb(":memory:");
     db.insert(build)
         .values({ guildId: "1", name: "vanilla", alias: "main" })
         .run();
-    assert.throws(
-        () =>
-            db
-                .insert(build)
-                .values({ guildId: "1", name: "modded", alias: "main" })
-                .run(),
-        (e: unknown) => sqliteCode(e) === "SQLITE_CONSTRAINT_UNIQUE"
-    );
-    // the same alias in another guild is fine
     db.insert(build)
-        .values({ guildId: "2", name: "modded", alias: "main" })
+        .values({ guildId: "1", name: "modded", alias: "main" })
         .run();
+    assert.equal(
+        db.select().from(build).where(eq(build.guildId, "1")).all().length,
+        2
+    );
     db.$client.close();
 });
 

@@ -1,4 +1,4 @@
-import { primaryKey, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
+import { primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const build = sqliteTable(
     "build",
@@ -7,10 +7,7 @@ export const build = sqliteTable(
         name: text("name").notNull(),
         alias: text("alias").notNull(),
     },
-    t => [
-        primaryKey({ columns: [t.guildId, t.name] }),
-        unique().on(t.guildId, t.alias),
-    ]
+    t => [primaryKey({ columns: [t.guildId, t.name] })]
 );
 
 export const notifyChannel = sqliteTable("notify_channel", {

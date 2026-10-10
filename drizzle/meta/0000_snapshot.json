@@ -1,7 +1,7 @@
 {
     "version": "6",
     "dialect": "sqlite",
-    "id": "72ac2ee9-82f5-4c6b-9365-c6e608dadf37",
+    "id": "282cf26d-74b5-4293-a508-b91cd46a7f7f",
     "prevId": "00000000-0000-0000-0000-000000000000",
     "tables": {
         "build": {
@@ -29,13 +29,7 @@
                     "autoincrement": false
                 }
             },
-            "indexes": {
-                "build_guild_id_alias_unique": {
-                    "name": "build_guild_id_alias_unique",
-                    "columns": ["guild_id", "alias"],
-                    "isUnique": true
-                }
-            },
+            "indexes": {},
             "foreignKeys": {},
             "compositePrimaryKeys": {
                 "build_guild_id_name_pk": {

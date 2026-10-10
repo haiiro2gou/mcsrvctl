@@ -28,6 +28,8 @@ export const backup = async (
 ): Promise<void> => {
     const buf = db.$client.serialize();
     writeFileSync(path.join(stateDir, "backup.db"), buf);
+
+    log("backup saved");
     if (url === undefined || url === "") return;
     const stamp = new Date().toISOString().replace(/[-:T]|\.\d+Z$/g, "");
     try {
@@ -35,7 +37,8 @@ export const backup = async (
             method: "PUT",
             body: buf,
         });
-        if (!res.ok) log(`backup upload failed: ${res.status}`, "Warn");
+        if (res.ok) log("backup uploaded");
+        else log(`backup upload failed: ${res.status}`, "Warn");
     } catch (e) {
         log(
             `backup upload failed: ${e instanceof Error ? e.message : String(e)}`,
