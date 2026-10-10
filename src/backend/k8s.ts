@@ -5,7 +5,7 @@ import {
     PatchStrategy,
     setHeaderOptions,
 } from "@kubernetes/client-node";
-import { NotFoundError, type Backend, type Target } from "./types.js";
+import { NotFoundError, type Backend, type Target } from "./type.js";
 
 const kc = new KubeConfig();
 kc.loadFromDefault();

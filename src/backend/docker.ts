@@ -1,4 +1,4 @@
-import { NotFoundError, type Backend, type Target } from "./types.js";
+import { NotFoundError, type Backend, type Target } from "./type.js";
 
 const containerOf = ({ guildId, name }: Target): string =>
     `mc-${guildId}-${name}`;
