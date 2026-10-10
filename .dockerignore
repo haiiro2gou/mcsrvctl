@@ -45,6 +45,4 @@ LICENSE
 docs
 
 # Template
-config-example.json
-inventory.example.json
 *.example

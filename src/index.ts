@@ -1,17 +1,9 @@
-import { Client, GatewayIntentBits, Partials } from "discord.js";
-import eventHandler from "./handler/event.js";
+import { Client, GatewayIntentBits } from "discord.js";
 
 const client = new Client({
-    intents: [
-        GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-    ],
-    partials: [Partials.Message, Partials.Channel],
+    intents: [GatewayIntentBits.Guilds],
 });
 
-eventHandler(client);
+// eventHandler(client);
 
 void client.login(process.env.DISCORD_TOKEN);
