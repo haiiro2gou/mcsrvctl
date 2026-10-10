@@ -10,17 +10,19 @@
   },
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "test": "tsx --test 'src/**/*.test.ts'",
+    "start": "node dist/index.js",
     "clean": "rimraf dist/* --glob",
     "tsc": "tsc -p tsconfig.build.json",
     "build": "npm-run-all clean tsc",
-    "start": "node dist/index.js",
     "check-types": "tsc --noEmit",
     "eslint": "eslint src/**/*.ts",
     "eslint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write 'src/**/*.{js,ts,json}'",
     "lint": "npm-run-all eslint check-types",
     "lint:fix": "npm-run-all eslint:fix check-types format",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:generate": "drizzle-kit generate"
   },
   "author": "haiiro2gou <mrashen.2gou@gmail.com>",
   "license": "MIT License",
@@ -32,7 +34,9 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@haiiro2gou/eslint-config": "2.0.0",
+    "@types/better-sqlite3": "9.6.0",
     "@types/node": "24.19.1",
+    "drizzle-kit": "0.31.11",
     "eslint": "10.12.0",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.13.0",
@@ -47,23 +51,25 @@
   },
   "dependencies": {
     "@kubernetes/client-node": "1.4.0",
+    "better-sqlite3": "13.0.3",
     "discord.js": "14.27.0",
-    "dotenv": "16.6.1",
-    "minecraft-status": "1.1.0",
-    "node-cron": "4.6.0"
+    "drizzle-orm": "0.45.4",
+    "minecraft-status": "1.1.0"
   },
   "overrides": {
     "undici": "^7.22.0"
-  },
-  "imports": {
-    "#lib/*.js": "./dist/lib/*.js",
-    "#features/*.js": "./dist/features/*.js",
-    "#utils/*.js": "./dist/utils/*.js"
   },
   "lint-staged": {
     "*.{js,ts}": "eslint --cache --fix",
     "*.ts": "bash -c 'tsc --noEmit'",
     "*.{js,ts,json}": "prettier --write",
     "*.js": "eslint --cache --fix"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": false,
+    "esbuild@0.25.12": false,
+    "esbuild@0.28.2": false,
+    "better-sqlite3": false,
+    "unrs-resolver": false
   }
 }
