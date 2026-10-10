@@ -10,10 +10,11 @@
   },
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "test": "tsx --test 'src/**/*.test.ts'",
+    "start": "node dist/index.js",
     "clean": "rimraf dist/* --glob",
     "tsc": "tsc -p tsconfig.build.json",
     "build": "npm-run-all clean tsc",
-    "start": "node dist/index.js",
     "check-types": "tsc --noEmit",
     "eslint": "eslint src/**/*.ts",
     "eslint:fix": "eslint src/**/*.ts --fix",
@@ -48,22 +49,19 @@
   "dependencies": {
     "@kubernetes/client-node": "1.4.0",
     "discord.js": "14.27.0",
-    "dotenv": "16.6.1",
-    "minecraft-status": "1.1.0",
-    "node-cron": "4.6.0"
+    "minecraft-status": "1.1.0"
   },
   "overrides": {
     "undici": "^7.22.0"
-  },
-  "imports": {
-    "#lib/*.js": "./dist/lib/*.js",
-    "#features/*.js": "./dist/features/*.js",
-    "#utils/*.js": "./dist/utils/*.js"
   },
   "lint-staged": {
     "*.{js,ts}": "eslint --cache --fix",
     "*.ts": "bash -c 'tsc --noEmit'",
     "*.{js,ts,json}": "prettier --write",
     "*.js": "eslint --cache --fix"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": false,
+    "unrs-resolver": false
   }
 }
