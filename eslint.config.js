@@ -20,7 +20,7 @@ export default [
             ecmaVersion: 2023,
             sourceType: "module",
             parserOptions: {
-                projectService: true,
+                projectService: { allowDefaultProject: ["drizzle.config.ts"] },
                 tsconfigRootDir: import.meta.dirname,
             },
         },

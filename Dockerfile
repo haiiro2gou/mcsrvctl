@@ -18,6 +18,7 @@ COPY --chown=node:node package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev --no-audit --no-fund --ignore-scripts
 COPY --chown=node:node --from=builder /build/dist ./dist/
+COPY --chown=node:node drizzle/ ./drizzle/
 USER node
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "dist/index.js"]
