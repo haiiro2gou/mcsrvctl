@@ -3,7 +3,6 @@
  * @param content content to log, can be a string or an array of strings
  * @param attribute type of log, defaults to "Info"
  */
-
 export default function log(
     content: string | string[],
     attribute = "Info"
