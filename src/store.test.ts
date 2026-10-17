@@ -34,8 +34,8 @@ const withState = (run: (dir: string, file: string) => void): void => {
 void test("a missing file loads as an empty state", () => {
     withState((_dir, file) => {
         load(file);
-        assert.deepEqual(listBuilds("1"), []);
-        assert.equal(getNotify("1"), undefined);
+        assert.deepEqual(listBuilds("guildA"), []);
+        assert.equal(getNotify("guildA"), undefined);
     });
 });
 
@@ -43,14 +43,14 @@ void test("addBuild writes the file and the state survives a reload", () => {
     withState((_dir, file) => {
         load(file);
         assert.equal(
-            addBuild("1", { name: "vanilla", alias: "Vanilla" }),
+            addBuild("guildA", { name: "vanilla", alias: "Vanilla" }),
             true
         );
         assert.deepEqual(JSON.parse(readFileSync(file, "utf8")), {
-            "1": { builds: [{ name: "vanilla", alias: "Vanilla" }] },
+            guildA: { builds: [{ name: "vanilla", alias: "Vanilla" }] },
         });
         load(file);
-        assert.deepEqual(findBuild("1", "vanilla"), {
+        assert.deepEqual(findBuild("guildA", "vanilla"), {
             name: "vanilla",
             alias: "Vanilla",
         });
@@ -60,18 +60,21 @@ void test("addBuild writes the file and the state survives a reload", () => {
 void test("builds are scoped to their guild", () => {
     withState((_dir, file) => {
         load(file);
-        addBuild("1", { name: "vanilla", alias: "Vanilla" });
-        assert.deepEqual(listBuilds("2"), []);
-        assert.equal(findBuild("2", "vanilla"), undefined);
+        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
+        assert.deepEqual(listBuilds("guildB"), []);
+        assert.equal(findBuild("guildB", "vanilla"), undefined);
     });
 });
 
 void test("a duplicate name is rejected and nothing is written", () => {
     withState((_dir, file) => {
         load(file);
-        addBuild("1", { name: "vanilla", alias: "Vanilla" });
-        assert.equal(addBuild("1", { name: "vanilla", alias: "Other" }), false);
-        assert.equal(listBuilds("1").length, 1);
+        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
+        assert.equal(
+            addBuild("guildA", { name: "vanilla", alias: "Other" }),
+            false
+        );
+        assert.equal(listBuilds("guildA").length, 1);
     });
 });
 
@@ -80,37 +83,43 @@ void test("the guild is capped at maxBuilds", () => {
         load(file);
         Array.from({ length: maxBuilds }, (_, i) => i).forEach(i => {
             assert.equal(
-                addBuild("1", { name: `b${i}`, alias: `B${i}` }),
+                addBuild("guildA", { name: `b${i}`, alias: `B${i}` }),
                 true
             );
         });
-        assert.equal(addBuild("1", { name: "extra", alias: "Extra" }), false);
-        assert.equal(listBuilds("1").length, maxBuilds);
+        assert.equal(
+            addBuild("guildA", { name: "extra", alias: "Extra" }),
+            false
+        );
+        assert.equal(listBuilds("guildA").length, maxBuilds);
     });
 });
 
 void test("removeBuild removes a build and reports a missing one", () => {
     withState((_dir, file) => {
         load(file);
-        addBuild("1", { name: "vanilla", alias: "Vanilla" });
-        assert.equal(removeBuild("1", "vanilla"), true);
-        assert.deepEqual(listBuilds("1"), []);
-        assert.equal(removeBuild("1", "vanilla"), false);
-        assert.equal(removeBuild("2", "vanilla"), false);
+        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
+        assert.equal(removeBuild("guildA", "vanilla"), true);
+        assert.deepEqual(listBuilds("guildA"), []);
+        assert.equal(removeBuild("guildA", "vanilla"), false);
+        assert.equal(removeBuild("guildB", "vanilla"), false);
     });
 });
 
 void test("setNotify and clearNotify round-trip through the file", () => {
     withState((_dir, file) => {
         load(file);
-        setNotify("1", { channelId: "10", messageId: "20" });
+        setNotify("guildA", { channelId: "10", messageId: "20" });
         load(file);
-        assert.deepEqual(getNotify("1"), { channelId: "10", messageId: "20" });
-        clearNotify("1");
+        assert.deepEqual(getNotify("guildA"), {
+            channelId: "10",
+            messageId: "20",
+        });
+        clearNotify("guildA");
         load(file);
-        assert.equal(getNotify("1"), undefined);
+        assert.equal(getNotify("guildA"), undefined);
         assert.deepEqual(JSON.parse(readFileSync(file, "utf8")), {
-            "1": { builds: [] },
+            guildA: { builds: [] },
         });
     });
 });
@@ -127,7 +136,7 @@ void test("a broken file stops load, and a write leaves no .tmp behind", () => {
         }, /not an object/);
         rmSync(file);
         load(file);
-        addBuild("1", { name: "vanilla", alias: "Vanilla" });
+        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
         assert.deepEqual(readdirSync(dir), ["state.json"]);
     });
 });
