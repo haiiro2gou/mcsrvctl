@@ -1,9 +1,11 @@
 import { MinecraftServerListPing } from "minecraft-status";
 
+/** Result of one ping: player counts when the server answered, else why not. */
 export type Status =
     | { online: true; players: number; max: number }
     | { online: false; error: string };
 
+/** Accepts only a non-negative integer, so a hostile server cannot inject other values. */
 const count = (v: unknown): number | undefined =>
     typeof v === "number" && Number.isInteger(v) && v >= 0 ? v : undefined;
 
@@ -26,4 +28,28 @@ export const ping = async (host: string): Promise<Status> => {
             error: e instanceof Error ? e.message : String(e),
         };
     }
+};
+
+/** One line of the status board; status is undefined before the first ping. */
+export interface StatusRow {
+    alias: string;
+    status: Status | undefined;
+}
+
+const line = ({ alias, status }: StatusRow): string => {
+    if (status === undefined) return `⚪ \`${alias}\` 確認中`;
+    if (status.online) return `🟢 \`${alias}\` ${status.players}/${status.max}`;
+    return `⚫ \`${alias}\` 停止中`;
+};
+
+/**
+ * Renders the status board. Aliases sit in code spans and the caller sends it with no mentions allowed.
+ * @param rows one entry per registered build
+ */
+export const renderStatus = (rows: readonly StatusRow[]): string => {
+    const body =
+        rows.length === 0
+            ? "登録されたサーバーはありません"
+            : rows.map(line).join("\n");
+    return `**Server Status**\n${body}\n更新: <t:${Math.floor(Date.now() / 1000)}:R>`;
 };
