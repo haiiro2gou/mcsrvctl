@@ -35,7 +35,7 @@
 - 型は `interface` で宣言する (`consistent-type-definitions`)。条件は `strict-boolean-expressions` に合わせて `x === undefined || x === ""` のように書く。文字列の連結はテンプレートリテラル。
 - `curly` は複数行のときだけ波括弧。`no-floating-promises` は `void fn()` で満たす。`process.exit` は使わず throw する。
 - export する関数には `src/util/log.ts` と同じ JSDoc (`@param`、`@returns`、throw するなら `@throws`) を付ける。
-- ログは英語、Discord に出す文言は日本語。状態が変わるたびに 1 行ログを出す。
+- コードのコメントと JSDoc は英語。ログも英語で、Discord に出す文言だけ日本語 (開発者向けは英語、利用者向けは日本語)。状態が変わるたびに 1 行ログを出す。
 
 ## コミット
 
