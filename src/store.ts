@@ -1,7 +1,7 @@
 import { readJson, writeJson } from "./util/io.js";
 import log from "./util/log.js";
 
-export interface Build {
+export interface Server {
     name: string;
     alias: string;
 }
@@ -10,12 +10,12 @@ export interface Notify {
     messageId: string;
 }
 export interface GuildState {
-    builds: Build[];
+    servers: Server[];
     notify?: Notify;
 }
 export type State = Record<string, GuildState>;
 
-export const maxBuilds = 10;
+export const maxServers = 10;
 const state: { current: { file: string; data: State } } = {
     current: { file: "", data: {} },
 };
@@ -45,23 +45,21 @@ export const load = (file: string): void => {
 };
 
 /**
- * Lists the builds registered in a guild.
+ * Lists the servers registered in a guild.
  * @param guildId Discord guild ID
- * @returns the builds in registration order, empty when the guild has none
+ * @returns the servers in registration order, empty when the guild has none
  */
-export const listBuilds = (guildId: string): readonly Build[] =>
-    guildOf(guildId)?.builds ?? [];
+export const listServers = (guildId: string): readonly Server[] =>
+    guildOf(guildId)?.servers ?? [];
 
 /**
- * Finds a build of a guild by its name.
+ * Finds a server of a guild by its name.
  * @param guildId Discord guild ID
- * @param buildName build name (DNS label)
- * @returns the build, or undefined when the guild has no build with that name
+ * @param name server name (DNS label)
+ * @returns the server, or undefined when the guild has no server with that name
  */
-export const findBuild = (
-    guildId: string,
-    buildName: string
-): Build | undefined => listBuilds(guildId).find(b => b.name === buildName);
+export const findServer = (guildId: string, name: string): Server | undefined =>
+    listServers(guildId).find(b => b.name === name);
 
 /**
  * Returns the status board channel of a guild.
@@ -72,38 +70,41 @@ export const getNotify = (guildId: string): Notify | undefined =>
     guildOf(guildId)?.notify;
 
 /**
- * Registers a build and writes the state file.
+ * Registers a server and writes the state file.
  * The name check and the cap are applied here, synchronously, so concurrent commands cannot bypass them.
  * @param guildId Discord guild ID
- * @param build validated name and alias
- * @returns false when the name is already taken or the guild has maxBuilds builds; nothing is written then
+ * @param server validated name and alias
+ * @returns false when the name is already taken or the guild has maxServers servers; nothing is written then
  */
-export const addBuild = (guildId: string, build: Build): boolean => {
-    const builds = listBuilds(guildId);
-    if (builds.length >= maxBuilds || builds.some(b => b.name === build.name))
+export const addServer = (guildId: string, server: Server): boolean => {
+    const servers = listServers(guildId);
+    if (
+        servers.length >= maxServers ||
+        servers.some(b => b.name === server.name)
+    )
         return false;
-    const guild = guildOf(guildId) ?? { builds: [] };
+    const guild = guildOf(guildId) ?? { servers: [] };
     save({
         ...state.current.data,
-        [guildId]: { ...guild, builds: [...builds, build] },
+        [guildId]: { ...guild, servers: [...servers, server] },
     });
     return true;
 };
 
 /**
- * Removes a build and writes the state file.
+ * Removes a server and writes the state file.
  * @param guildId Discord guild ID
- * @param buildName build name
- * @returns false when the guild has no build with that name; nothing is written then
+ * @param name server name
+ * @returns false when the guild has no server with that name; nothing is written then
  */
-export const removeBuild = (guildId: string, buildName: string): boolean => {
+export const removeServer = (guildId: string, name: string): boolean => {
     const guild = guildOf(guildId);
     if (guild === undefined) return false;
-    const builds = guild.builds.filter(b => b.name !== buildName);
-    if (builds.length === guild.builds.length) return false;
+    const servers = guild.servers.filter(b => b.name !== name);
+    if (servers.length === guild.servers.length) return false;
     save({
         ...state.current.data,
-        [guildId]: { ...guild, builds },
+        [guildId]: { ...guild, servers },
     });
     return true;
 };
@@ -114,7 +115,7 @@ export const removeBuild = (guildId: string, buildName: string): boolean => {
  * @param notify channel and message IDs of the board that was just posted
  */
 export const setNotify = (guildId: string, notify: Notify): void => {
-    const guilds = guildOf(guildId) ?? { builds: [] };
+    const guilds = guildOf(guildId) ?? { servers: [] };
     save({
         ...state.current.data,
         [guildId]: { ...guilds, notify },
