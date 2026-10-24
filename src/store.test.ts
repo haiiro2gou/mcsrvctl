@@ -10,14 +10,14 @@ import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import {
-    addBuild,
+    addServer,
     clearNotify,
-    findBuild,
+    findServer,
     getNotify,
-    listBuilds,
+    listServers,
     load,
-    maxBuilds,
-    removeBuild,
+    maxServers,
+    removeServer,
     setNotify,
 } from "./store.js";
 
@@ -34,75 +34,75 @@ const withState = (run: (dir: string, file: string) => void): void => {
 void test("a missing file loads as an empty state", () => {
     withState((_dir, file) => {
         load(file);
-        assert.deepEqual(listBuilds("guildA"), []);
+        assert.deepEqual(listServers("guildA"), []);
         assert.equal(getNotify("guildA"), undefined);
     });
 });
 
-void test("addBuild writes the file and the state survives a reload", () => {
+void test("addServer writes the file and the state survives a reload", () => {
     withState((_dir, file) => {
         load(file);
         assert.equal(
-            addBuild("guildA", { name: "vanilla", alias: "Vanilla" }),
+            addServer("guildA", { name: "vanilla", alias: "Vanilla" }),
             true
         );
         assert.deepEqual(JSON.parse(readFileSync(file, "utf8")), {
-            guildA: { builds: [{ name: "vanilla", alias: "Vanilla" }] },
+            guildA: { servers: [{ name: "vanilla", alias: "Vanilla" }] },
         });
         load(file);
-        assert.deepEqual(findBuild("guildA", "vanilla"), {
+        assert.deepEqual(findServer("guildA", "vanilla"), {
             name: "vanilla",
             alias: "Vanilla",
         });
     });
 });
 
-void test("builds are scoped to their guild", () => {
+void test("servers are scoped to their guild", () => {
     withState((_dir, file) => {
         load(file);
-        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
-        assert.deepEqual(listBuilds("guildB"), []);
-        assert.equal(findBuild("guildB", "vanilla"), undefined);
+        addServer("guildA", { name: "vanilla", alias: "Vanilla" });
+        assert.deepEqual(listServers("guildB"), []);
+        assert.equal(findServer("guildB", "vanilla"), undefined);
     });
 });
 
 void test("a duplicate name is rejected and nothing is written", () => {
     withState((_dir, file) => {
         load(file);
-        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
+        addServer("guildA", { name: "vanilla", alias: "Vanilla" });
         assert.equal(
-            addBuild("guildA", { name: "vanilla", alias: "Other" }),
+            addServer("guildA", { name: "vanilla", alias: "Other" }),
             false
         );
-        assert.equal(listBuilds("guildA").length, 1);
+        assert.equal(listServers("guildA").length, 1);
     });
 });
 
-void test("the guild is capped at maxBuilds", () => {
+void test("the guild is capped at maxServers", () => {
     withState((_dir, file) => {
         load(file);
-        Array.from({ length: maxBuilds }, (_, i) => i).forEach(i => {
+        Array.from({ length: maxServers }, (_, i) => i).forEach(i => {
             assert.equal(
-                addBuild("guildA", { name: `b${i}`, alias: `B${i}` }),
+                addServer("guildA", { name: `b${i}`, alias: `B${i}` }),
                 true
             );
         });
         assert.equal(
-            addBuild("guildA", { name: "extra", alias: "Extra" }),
+            addServer("guildA", { name: "extra", alias: "Extra" }),
             false
         );
-        assert.equal(listBuilds("guildA").length, maxBuilds);
+        assert.equal(listServers("guildA").length, maxServers);
     });
 });
 
-void test("removeBuild removes a build and reports a missing one", () => {
+void test("removeServer removes a server and reports a missing one", () => {
     withState((_dir, file) => {
         load(file);
-        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
-        assert.equal(removeBuild("guildA", "vanilla"), true);
-        assert.deepEqual(listBuilds("guildA"), []);
-        assert.equal(removeBuild("guildA", "vanilla"), false);
-        assert.equal(removeBuild("guildB", "vanilla"), false);
+        addServer("guildA", { name: "vanilla", alias: "Vanilla" });
+        assert.equal(removeServer("guildA", "vanilla"), true);
+        assert.deepEqual(listServers("guildA"), []);
+        assert.equal(removeServer("guildA", "vanilla"), false);
+        assert.equal(removeServer("guildB", "vanilla"), false);
     });
 });
 
@@ -119,7 +119,7 @@ void test("setNotify and clearNotify round-trip through the file", () => {
         load(file);
         assert.equal(getNotify("guildA"), undefined);
         assert.deepEqual(JSON.parse(readFileSync(file, "utf8")), {
-            guildA: { builds: [] },
+            guildA: { servers: [] },
         });
     });
 });
@@ -136,7 +136,7 @@ void test("a broken file stops load, and a write leaves no .tmp behind", () => {
         }, /not an object/);
         rmSync(file);
         load(file);
-        addBuild("guildA", { name: "vanilla", alias: "Vanilla" });
+        addServer("guildA", { name: "vanilla", alias: "Vanilla" });
         assert.deepEqual(readdirSync(dir), ["state.json"]);
     });
 });
