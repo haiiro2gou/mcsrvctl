@@ -14,7 +14,7 @@ import errorMessage from "./util/error.js";
 import log from "./util/log.js";
 import { noMentions } from "./command/common.js";
 
-const tickMs = 60 * 1000,
+const pollMs = 60 * 1000,
     refreshMs = 10 * 60 * 1000;
 const goneCodes: readonly (number | string)[] = [10003, 50001, 50013];
 
@@ -102,7 +102,7 @@ const post = async (
     }
 };
 
-const tickGuild = async (
+const pollGuild = async (
     client: Client<true>,
     guildId: string,
     now: number
@@ -116,11 +116,11 @@ const tickGuild = async (
     lastEdit.current.set(guildId, now);
 };
 
-const tick = async (client: Client<true>): Promise<void> => {
+const poll = async (client: Client<true>): Promise<void> => {
     const now = Date.now();
     for (const guildId of client.guilds.cache.keys()) {
         try {
-            await tickGuild(client, guildId, now);
+            await pollGuild(client, guildId, now);
         } catch (err) {
             if (err instanceof DiscordAPIError && goneCodes.includes(err.code))
                 dropNotify(guildId, String(err.code));
@@ -136,7 +136,7 @@ const tick = async (client: Client<true>): Promise<void> => {
  */
 export const startMonitor = (client: Client<true>): void => {
     const run = (): void => {
-        void tick(client).finally(() => setTimeout(run, tickMs).unref());
+        void poll(client).finally(() => setTimeout(run, pollMs).unref());
     };
     run();
 };
