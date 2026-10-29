@@ -10,16 +10,16 @@ import { commands, dispatch } from "./command/index.js";
 const stateFile = path.join(env.stateDir, "state.json");
 try {
     load(stateFile);
-} catch (e) {
-    log(`Failed to load ${stateFile}: ${errorMessage(e)}`, "Error");
-    throw e;
+} catch (err) {
+    log(`Failed to load ${stateFile}: ${errorMessage(err)}`, "Error");
+    throw err;
 }
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once(Events.ClientReady, readyClient => {
     void readyClient.application.commands.set(
-        [...commands.values()].map(c => c.data)
+        [...commands.values()].map(command => command.data)
     );
     log(
         `Ready as ${readyClient.user.tag} in ${readyClient.guilds.cache.size} guilds`

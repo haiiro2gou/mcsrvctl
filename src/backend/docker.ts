@@ -18,11 +18,11 @@ const post = async (
 };
 
 export const docker: Backend = {
-    start: t => post(containerOf(t), "start"),
-    stop: t => post(containerOf(t), "stop"),
-    exists: async t => {
+    start: target => post(containerOf(target), "start"),
+    stop: target => post(containerOf(target), "stop"),
+    exists: async target => {
         try {
-            await post(containerOf(t), "stop");
+            await post(containerOf(target), "stop");
             return true;
         } catch (err) {
             if (err instanceof NotFoundError) return false;

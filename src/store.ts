@@ -20,8 +20,8 @@ const state: { current: { file: string; data: State } } = {
     current: { file: "", data: {} },
 };
 /** Narrows a parsed JSON value to State: a non-null, non-array object. */
-const isState = (v: unknown): v is State =>
-    typeof v === "object" && v !== null && !Array.isArray(v);
+const isState = (value: unknown): value is State =>
+    typeof value === "object" && value !== null && !Array.isArray(value);
 /** Writes the next state to the file, then makes it current, so a failed write leaves memory unchanged. */
 const save = (data: State): void => {
     writeJson(state.current.file, data);
@@ -59,7 +59,7 @@ export const listServers = (guildId: string): readonly Server[] =>
  * @returns the server, or undefined when the guild has no server with that name
  */
 export const findServer = (guildId: string, name: string): Server | undefined =>
-    listServers(guildId).find(b => b.name === name);
+    listServers(guildId).find(server => server.name === name);
 
 /**
  * Returns the status board channel of a guild.
@@ -80,7 +80,7 @@ export const addServer = (guildId: string, server: Server): boolean => {
     const servers = listServers(guildId);
     if (
         servers.length >= maxServers ||
-        servers.some(b => b.name === server.name)
+        servers.some(registered => registered.name === server.name)
     )
         return false;
     const guild = guildOf(guildId) ?? { servers: [] };
@@ -100,7 +100,7 @@ export const addServer = (guildId: string, server: Server): boolean => {
 export const removeServer = (guildId: string, name: string): boolean => {
     const guild = guildOf(guildId);
     if (guild === undefined) return false;
-    const servers = guild.servers.filter(b => b.name !== name);
+    const servers = guild.servers.filter(server => server.name !== name);
     if (servers.length === guild.servers.length) return false;
     save({
         ...state.current.data,
