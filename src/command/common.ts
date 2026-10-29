@@ -2,6 +2,11 @@ import { type AutocompleteInteraction } from "discord.js";
 
 import { listServers } from "../store.js";
 
+/**
+ * Answers a server autocomplete with the guild's servers whose alias starts with the typed text.
+ * Shows "alias (name)" and returns the name, at most 25 choices as Discord allows.
+ * @param interaction autocomplete interaction from a guild
+ */
 export const autocompleteServer = async (
     interaction: AutocompleteInteraction<"cached">
 ): Promise<void> => {
