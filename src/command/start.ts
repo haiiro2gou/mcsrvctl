@@ -7,6 +7,7 @@ import {
 
 import log from "../util/log.js";
 import { backend } from "../backend/index.js";
+import { resetIdle } from "../monitor.js";
 import { ping } from "../status.js";
 import { findServer } from "../store.js";
 import { type Command } from "./index.js";
@@ -58,6 +59,7 @@ export const start: Command = {
             return;
         }
         await backend.start(target);
+        resetIdle(guildId, server.name);
         log(`Start ${guildId}/${server.name}`);
         await interaction.editReply({
             content: `\`${server.alias}\` を起動しました。`,

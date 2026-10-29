@@ -1,9 +1,11 @@
 import path from "node:path";
 import { Client, Events, GatewayIntentBits } from "discord.js";
-import { env } from "./env.js";
-import { load } from "./store.js";
+
 import log from "./util/log.js";
 import errorMessage from "./util/error.js";
+import { env } from "./env.js";
+import { startMonitor } from "./monitor.js";
+import { backup, load } from "./store.js";
 import { stopAll } from "./backend/index.js";
 import { commands, dispatch } from "./command/index.js";
 
@@ -15,6 +17,12 @@ try {
     throw err;
 }
 
+const dayMs = 24 * 60 * 60 * 1000;
+void backup(env.backupUrl);
+setInterval(() => {
+    void backup(env.backupUrl);
+}, dayMs).unref();
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once(Events.ClientReady, readyClient => {
@@ -24,6 +32,7 @@ client.once(Events.ClientReady, readyClient => {
     log(
         `Ready as ${readyClient.user.tag} in ${readyClient.guilds.cache.size} guilds`
     );
+    startMonitor(readyClient);
 });
 client.on(Events.InteractionCreate, interaction => {
     void dispatch(interaction);
