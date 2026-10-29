@@ -10,6 +10,11 @@ export { NotFoundError, type Backend, type Target } from "./type.js";
 
 export const backend: Backend = env.backend === "docker" ? docker : k8s;
 
+/**
+ * Stops every registered server of a guild, e.g. after the bot was removed from it.
+ * Failures are logged per server and never thrown; the settings stay for a re-invite.
+ * @param guildId Discord guild ID
+ */
 export const stopAll = async (guildId: string): Promise<void> => {
     const servers = listServers(guildId);
     log(`Guild ${guildId} has left; stopping ${servers.length} servers`);

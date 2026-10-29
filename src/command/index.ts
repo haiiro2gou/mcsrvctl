@@ -28,6 +28,11 @@ export const commands = new Map<string, Command>(
     [start, stop, server, notify].map(command => [command.data.name, command])
 );
 
+/**
+ * Routes one interaction to its command. Only guild slash commands and their autocompletes are handled.
+ * A failing command is logged and answered with a fixed text; a failing answer (expired interaction) is ignored.
+ * @param interaction any interaction the gateway delivered
+ */
 export const dispatch = async (interaction: Interaction): Promise<void> => {
     if (!interaction.inCachedGuild()) return;
     if (!interaction.isChatInputCommand() && !interaction.isAutocomplete())
