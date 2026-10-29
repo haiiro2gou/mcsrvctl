@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 
 import log from "../util/log.js";
+import { refreshBoard } from "../monitor.js";
 import { renderStatus } from "../status.js";
 import {
     clearNotify,
@@ -73,6 +74,7 @@ const set = async (interaction: Interaction): Promise<void> => {
         allowedMentions: noMentions,
     });
     setNotify(guildId, { channelId: channel.id, messageId: message.id });
+    refreshBoard(guildId);
     log(`Notify set ${guildId} -> ${channel.id}`);
     if (previous !== undefined) await deleteBoard(interaction.client, previous);
     await interaction.editReply(

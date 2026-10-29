@@ -30,6 +30,14 @@ export const resetIdle = (guildId: string, name: string): void => {
     states.current.delete(`${guildId}/${name}`);
 };
 
+/**
+ * Makes the next poll redraw the board of a guild, e.g. right after /notify set.
+ * @param guildId Discord guild ID
+ */
+export const refreshBoard = (guildId: string): void => {
+    lastEdit.current.set(guildId, 0);
+};
+
 const shown = (status: Status | undefined): string => {
     if (status === undefined) return "";
     return status.online ? `${status.players}/${status.max}` : "offline";
