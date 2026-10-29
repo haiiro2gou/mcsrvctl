@@ -3,7 +3,7 @@ FROM node:24.21-alpine AS builder
 WORKDIR /build
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund
+    npm ci --no-audit --no-fund --ignore-scripts
 COPY tsconfig.json tsconfig.build.json ./
 COPY src/ ./src/
 RUN npm run build
