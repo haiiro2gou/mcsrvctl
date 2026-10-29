@@ -37,8 +37,8 @@ const scale = async (
 };
 
 export const k8s: Backend = {
-    start: t => scale(t, 1),
-    stop: t => scale(t, 0),
+    start: target => scale(target, 1),
+    stop: target => scale(target, 0),
     exists: async ({ guildId, name }) => {
         try {
             await apps.readNamespacedDeploymentScale({

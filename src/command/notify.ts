@@ -64,8 +64,8 @@ const set = async (interaction: Interaction): Promise<void> => {
     }
     await interaction.deferReply();
     const previous = getNotify(guildId);
-    const rows = listServers(guildId).map(b => ({
-        alias: b.alias,
+    const rows = listServers(guildId).map(server => ({
+        alias: server.alias,
         status: undefined,
     }));
     const message = await channel.send({
@@ -102,20 +102,22 @@ export const notify: Command = {
         .setDescription("サーバー状況を表示するチャンネルを管理する")
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .addSubcommand(s =>
-            s
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName("set")
                 .setDescription("サーバー状況を表示するチャンネルを設定する")
-                .addChannelOption(o =>
-                    o
+                .addChannelOption(option =>
+                    option
                         .setName("channel")
                         .setDescription("テキストチャンネル")
                         .addChannelTypes(ChannelType.GuildText)
                         .setRequired(true)
                 )
         )
-        .addSubcommand(s =>
-            s.setName("remove").setDescription("サーバー状況の表示を止める")
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName("remove")
+                .setDescription("サーバー状況の表示を止める")
         ),
     execute: interaction =>
         interaction.options.getSubcommand() === "set"

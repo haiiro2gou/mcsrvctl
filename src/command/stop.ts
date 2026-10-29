@@ -19,15 +19,15 @@ export const stop: Command = {
         .setDescription("サーバーを停止する")
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-        .addStringOption(o =>
-            o
+        .addStringOption(option =>
+            option
                 .setName("server")
                 .setDescription("停止するサーバー")
                 .setRequired(true)
                 .setAutocomplete(true)
         )
-        .addBooleanOption(o =>
-            o.setName("force").setDescription("プレイヤーがいても止める")
+        .addBooleanOption(option =>
+            option.setName("force").setDescription("プレイヤーがいても止める")
         ),
     autocomplete: autocompleteServer,
     execute: async interaction => {

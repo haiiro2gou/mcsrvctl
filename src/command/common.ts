@@ -7,9 +7,12 @@ export const autocompleteServer = async (
 ): Promise<void> => {
     const typed = interaction.options.getFocused().toLowerCase();
     const choices = listServers(interaction.guildId)
-        .filter(b => b.alias.toLowerCase().startsWith(typed))
+        .filter(server => server.alias.toLowerCase().startsWith(typed))
         .slice(0, 25)
-        .map(b => ({ name: `${b.alias} (${b.name})`, value: b.name }));
+        .map(server => ({
+            name: `${server.alias} (${server.name})`,
+            value: server.name,
+        }));
     await interaction.respond(choices);
 };
 

@@ -6,8 +6,10 @@ export type Status =
     | { online: false; error: string };
 
 /** Accepts only a non-negative integer, so a hostile server cannot inject other values. */
-const count = (v: unknown): number | undefined =>
-    typeof v === "number" && Number.isInteger(v) && v >= 0 ? v : undefined;
+const count = (value: unknown): number | undefined =>
+    typeof value === "number" && Number.isInteger(value) && value >= 0
+        ? value
+        : undefined;
 
 /**
  * Pings a server on port 25565 with a 5 s timeout. Never throws.
@@ -22,10 +24,10 @@ export const ping = async (host: string): Promise<Status> => {
         if (players === undefined || max === undefined)
             return { online: false, error: "invalid response" };
         return { online: true, players, max };
-    } catch (e) {
+    } catch (err) {
         return {
             online: false,
-            error: e instanceof Error ? e.message : String(e),
+            error: err instanceof Error ? err.message : String(err),
         };
     }
 };

@@ -19,8 +19,8 @@ export const start: Command = {
         .setDescription("サーバーを起動する")
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-        .addStringOption(o =>
-            o
+        .addStringOption(option =>
+            option
                 .setName("server")
                 .setDescription("起動するサーバー")
                 .setRequired(true)
