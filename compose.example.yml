@@ -1,0 +1,59 @@
+# Example for self-hosting on one Docker host. Replace <guildId> with your guild ID.
+services:
+    docker-proxy:
+        image: tecnativa/docker-socket-proxy:v0.5.0
+        restart: unless-stopped
+        environment:
+            # Only POST /containers/{id}/start and /stop reach the Docker socket.
+            POST: 1
+            CONTAINERS: 0
+            ALLOW_START: 1
+            ALLOW_STOP: 1
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        networks:
+            - control
+
+    bot:
+        # Built from this checkout until a release image is published.
+        build: .
+        image: ghcr.io/haiiro2gou/mcsrvctl:2.0.0
+        restart: unless-stopped
+        env_file: .env
+        environment:
+            BACKEND: docker
+            DOCKER_HOST: http://docker-proxy:2375
+            STATE_DIR: /data
+        volumes:
+            - mcsrvctl-data:/data
+        read_only: true
+        user: "1000:1000"
+        cap_drop:
+            - ALL
+        networks:
+            - control
+            - game
+
+    # One service per Minecraft server. The container name must be mc-<guildId>-<name>,
+    # where <name> is the name given to /server add.
+    mc-vanilla:
+        image: itzg/minecraft-server:java21
+        container_name: mc-<guildId>-vanilla
+        restart: "no"
+        environment:
+            EULA: "TRUE"
+        mem_limit: 2g
+        volumes:
+            - mc-vanilla-data:/data
+        ports:
+            - "25565:25565"
+        networks:
+            - game
+
+networks:
+    control:
+    game:
+
+volumes:
+    mcsrvctl-data:
+    mc-vanilla-data:
