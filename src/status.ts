@@ -12,13 +12,22 @@ const count = (value: unknown): number | undefined =>
         : undefined;
 
 /**
- * Pings a server on port 25565 with a 5 s timeout. Never throws.
+ * Pings a server on port 25565. Never throws, and always settles within the timeout.
  * @param host host name from backend.host
+ * @param timeoutMs how long to wait for the answer
  * @returns online with the player counts, or offline with the error message
  */
-export const ping = async (host: string): Promise<Status> => {
+export const ping = async (host: string, timeoutMs = 5000): Promise<Status> => {
     try {
-        const res = await MinecraftServerListPing.ping(4, host, 25565, 5000);
+        // The library never settles when the server closes the connection without answering.
+        const res = await Promise.race([
+            MinecraftServerListPing.ping(4, host, 25565, timeoutMs),
+            new Promise<never>((_resolve, reject) =>
+                setTimeout(() => {
+                    reject(new Error("no response"));
+                }, timeoutMs).unref()
+            ),
+        ]);
         const players = count(res.players?.online);
         const max = count(res.players?.max);
         if (players === undefined || max === undefined)
