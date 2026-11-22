@@ -4,6 +4,8 @@
 
 Discord から Minecraft サーバーを起動・停止できる bot です。
 
+[![version](https://img.shields.io/github/v/tag/haiiro2gou/mcsrvctl?sort=semver&label=version)](https://github.com/haiiro2gou/mcsrvctl/tags)
+[![build](https://img.shields.io/github/actions/workflow/status/haiiro2gou/mcsrvctl/build.yml)](https://github.com/haiiro2gou/mcsrvctl/actions/workflows/build.yml)
 [![stars](https://img.shields.io/github/stars/haiiro2gou/mcsrvctl?logo=github)](https://github.com/haiiro2gou/mcsrvctl/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-%23F7DF1E?logo=mit&logoColor=black)](LICENSE)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
