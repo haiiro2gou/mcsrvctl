@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:26.13-alpine AS builder
+FROM --platform=$BUILDPLATFORM node:26.13-alpine AS builder
 WORKDIR /build
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
