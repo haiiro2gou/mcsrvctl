@@ -6,7 +6,7 @@
   "type": "module",
   "main": "dist/index.js",
   "engines": {
-    "node": ">=24"
+    "node": ">=26"
   },
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@haiiro2gou/eslint-config": "2.0.0",
-    "@types/node": "24.19.1",
+    "@types/node": "26.6.6",
     "eslint": "10.15.0",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.13.0",
