@@ -22,7 +22,7 @@ spec:
                 fsGroup: 1000
             containers:
                 - name: bot
-                  image: ghcr.io/haiiro2gou/mcsrvctl:2.0.0
+                  image: ghcr.io/haiiro2gou/mcsrvctl:2.0.1
                   envFrom:
                       - secretRef:
                             name: mcsrvctl

@@ -17,7 +17,7 @@ services:
     bot:
         # Built from this checkout until a release image is published.
         build: .
-        image: ghcr.io/haiiro2gou/mcsrvctl:2.0.0
+        image: ghcr.io/haiiro2gou/mcsrvctl:2.0.1
         restart: unless-stopped
         env_file: .env
         environment:
