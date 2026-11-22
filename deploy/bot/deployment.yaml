@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mcsrvctl
+    namespace: mcsrvctl
+spec:
+    replicas: 1
+    strategy:
+        type: Recreate
+    selector:
+        matchLabels:
+            app: mcsrvctl
+    template:
+        metadata:
+            labels:
+                app: mcsrvctl
+        spec:
+            serviceAccountName: mcsrvctl
+            securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                fsGroup: 1000
+            containers:
+                - name: bot
+                  image: ghcr.io/haiiro2gou/mcsrvctl:2.0.0
+                  envFrom:
+                      - secretRef:
+                            name: mcsrvctl
+                  env:
+                      - name: STATE_DIR
+                        value: /data
+                      - name: KUBE_NAMESPACE  # <KUBE_NAMESPACE>-<guildId>
+                        value: mc
+                  securityContext:
+                      readOnlyRootFilesystem: true
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                          drop: [ALL]
+                  resources:
+                      limits:
+                          cpu: 500m
+                          memory: 256Mi
+                  volumeMounts:
+                      - name: data
+                        mountPath: /data
+            volumes:
+                - name: data
+                  persistentVolumeClaim:
+                      claimName: mcsrvctl-data

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+    name: mc
+    namespace: mc-<guildId>
+spec:
+    hard:
+        count/pods: "2"
+        limits.cpu: "4"
+        limits.memory: 4Gi
