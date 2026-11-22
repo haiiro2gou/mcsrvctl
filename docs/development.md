@@ -8,12 +8,12 @@
 
 ## 開発環境
 
-- build・lint・依存の更新は devcontainer (`.devcontainer/`、Node 24) の中で行う。VS Code を使わないときは `npx @devcontainers/cli up --workspace-folder .` で起動し、`npx @devcontainers/cli exec --workspace-folder . <command>` で実行する。
+- build・lint・依存の更新は devcontainer (`.devcontainer/`、Node 26) の中で行う。VS Code を使わないときは `npx @devcontainers/cli up --workspace-folder .` で起動し、`npx @devcontainers/cli exec --workspace-folder . <command>` で実行する。
 - host には Node も `node_modules` も置かない。container の `node_modules` は named volume なので、`npm ci` は container の中でだけ行う。
 - pre-commit (husky + lint-staged) は、host で動くと `docker compose -p mcsrvctl_devcontainer exec` で container の中に処理を渡す。コミットの前に container を起動しておく。container の中かどうかは、`compose.yaml` で設定した `IN_DEVCONTAINER` で判定する。
 - `npm run dev` は `tsx watch` で `src/index.ts` を動かす。`.env` があれば読む。
 - 追跡する `postCreate.sh` と `compose.yaml` には、誰の環境でも要るものだけを書く。個人のツールに依存する準備は、追跡しない `*.local.*` に任せる。
-- Node の major は devcontainer の feature・`Dockerfile` の `node:24.x-alpine`・`@types/node`・`engines` の 4 か所でそろえる。
+- Node の major は devcontainer の feature・`Dockerfile` の `node:26.x-alpine`・`@types/node`・`engines` の 4 か所でそろえる。
 
 ## 依存の版
 
