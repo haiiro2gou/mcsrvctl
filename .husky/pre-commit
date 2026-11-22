@@ -1,0 +1,5 @@
+# Node lives only in the devcontainer: from the host, run the same check there.
+if [ -z "${IN_DEVCONTAINER-}" ]; then
+    exec docker compose -p mcsrvctl_devcontainer exec -T -u vscode -w /workspaces/mcsrvctl workspace npx lint-staged
+fi
+npx lint-staged

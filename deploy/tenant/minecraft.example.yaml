@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: vanilla-data
+    namespace: mc-<guildId>
+spec:
+    accessModes: [ReadWriteOnce]
+    resources:
+        requests:
+            storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: vanilla
+    namespace: mc-<guildId>
+spec:
+    replicas: 0  # between 0 and 1
+    strategy:
+        type: Recreate
+    selector:
+        matchLabels:
+            app: vanilla
+    template:
+        metadata:
+            labels:
+                app: vanilla
+        spec:
+            containers:
+                - name: minecraft
+                  image: itzg/minecraft-server:java21
+                  env:
+                      - name: EULA
+                        value: "TRUE"
+                  ports:
+                      - containerPort: 25565
+                  resources:
+                      limits:
+                          cpu: "2"
+                          memory: 2Gi
+                  volumeMounts:
+                      - name: data
+                        mountPath: /data
+            volumes:
+                - name: data
+                  persistentVolumeClaim:
+                      claimName: vanilla-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: vanilla
+    namespace: mc-<guildId>
+spec:
+    selector:
+        app: vanilla
+    ports:
+        - port: 25565

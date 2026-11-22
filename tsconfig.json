@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        /* Project */
+        "target": "ES2023",
+        "lib": ["ES2023"],
+
+        /* Module */
+        "module": "nodenext",
+        "rootDir": "src",
+        "moduleResolution": "nodenext",
+        "types": ["node"],
+
+        /* Output */
+        "noEmit": true,
+
+        /* Interop */
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+
+        /* Linting */
+        "skipLibCheck": true,
+        "strict": true,
+        "noUncheckedSideEffectImports": true,
+    },
+    "include": ["src"]
+}
