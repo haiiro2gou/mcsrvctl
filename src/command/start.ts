@@ -1,7 +1,6 @@
 import {
     InteractionContextType,
     MessageFlags,
-    PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
 
@@ -13,13 +12,14 @@ import { findServer } from "../store.js";
 import { type Command } from "./index.js";
 import { autocompleteServer, noMentions } from "./common.js";
 import { accept } from "./cooldown.js";
+import { operate } from "./permission.js";
 
 export const start: Command = {
     data: new SlashCommandBuilder()
         .setName("start")
         .setDescription("サーバーを起動する")
         .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+        .setDefaultMemberPermissions(operate)
         .addStringOption(option =>
             option
                 .setName("server")

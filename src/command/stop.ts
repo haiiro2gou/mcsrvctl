@@ -1,7 +1,6 @@
 import {
     InteractionContextType,
     MessageFlags,
-    PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
 
@@ -12,13 +11,14 @@ import { findServer } from "../store.js";
 import { type Command } from "./index.js";
 import { autocompleteServer, noMentions } from "./common.js";
 import { accept } from "./cooldown.js";
+import { manage, operate } from "./permission.js";
 
 export const stop: Command = {
     data: new SlashCommandBuilder()
         .setName("stop")
         .setDescription("サーバーを停止する")
         .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+        .setDefaultMemberPermissions(operate)
         .addStringOption(option =>
             option
                 .setName("server")
@@ -43,6 +43,14 @@ export const stop: Command = {
             });
             return;
         }
+        const force = interaction.options.getBoolean("force") ?? false;
+        if (force && !interaction.memberPermissions.has(manage)) {
+            await interaction.reply({
+                content: "強制的に停止する権限がありません。",
+                flags: MessageFlags.Ephemeral,
+            });
+            return;
+        }
         if (!accept(guildId, server.name)) {
             await interaction.reply({
                 content: "しばらく待ってからもう一度お願いします。",
@@ -52,7 +60,6 @@ export const stop: Command = {
         }
         await interaction.deferReply();
         const target = { guildId, name: server.name };
-        const force = interaction.options.getBoolean("force") ?? false;
         const status = await ping(backend.host(target));
         if (status.online && status.players > 0 && !force) {
             await interaction.editReply({

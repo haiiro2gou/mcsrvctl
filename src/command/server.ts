@@ -1,7 +1,6 @@
 import {
     InteractionContextType,
     MessageFlags,
-    PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
 
@@ -17,6 +16,7 @@ import {
 import { type Command } from "./index.js";
 import { autocompleteServer, noMentions } from "./common.js";
 import { isAlias, isName } from "./validate.js";
+import { manage } from "./permission.js";
 
 type Interaction = Parameters<Command["execute"]>[0];
 
@@ -94,7 +94,7 @@ export const server: Command = {
         .setName("server")
         .setDescription("サーバーの登録を管理する")
         .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDefaultMemberPermissions(manage)
         .addSubcommand(subcommand =>
             subcommand
                 .setName("add")

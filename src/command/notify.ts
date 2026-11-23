@@ -19,6 +19,7 @@ import {
 } from "../store.js";
 import { type Command } from "./index.js";
 import { noMentions } from "./common.js";
+import { manage } from "./permission.js";
 
 const deleteBoard = async (client: Client, board: Notify): Promise<void> => {
     try {
@@ -103,7 +104,7 @@ export const notify: Command = {
         .setName("notify")
         .setDescription("サーバー状況を表示するチャンネルを管理する")
         .setContexts(InteractionContextType.Guild)
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDefaultMemberPermissions(manage)
         .addSubcommand(subcommand =>
             subcommand
                 .setName("set")
