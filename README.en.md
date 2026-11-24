@@ -22,16 +22,16 @@ The command descriptions and the bot's replies are in Japanese.
 
 ## Commands
 
-| Command                                        | What it does                                           | Required permission |
-| ---------------------------------------------- | ------------------------------------------------------ | ------------------- |
-| `/start server:<server>`                       | Starts a server                                        | Manage Server       |
-| `/stop server:<server> [force:True]`           | Stops a server. Needs `force` while players are online | Manage Server       |
-| `/server add name:<name> alias:<display name>` | Registers a server                                     | Administrator       |
-| `/server remove server:<server>`               | Removes the registration (the server is not deleted)   | Administrator       |
-| `/notify set channel:<channel>`                | Sets the channel that shows the server status          | Administrator       |
-| `/notify remove`                               | Stops showing the server status                        | Administrator       |
+| Command                                        | What it does                                           | Required permission                |
+| ---------------------------------------------- | ------------------------------------------------------ | ---------------------------------- |
+| `/start server:<server>`                       | Starts a server                                        | Manage Server                      |
+| `/stop server:<server> [force:True]`           | Stops a server. Needs `force` while players are online | None (`force` needs Manage Server) |
+| `/server add name:<name> alias:<display name>` | Registers a server                                     | Administrator                      |
+| `/server remove server:<server>`               | Removes the registration (the server is not deleted)   | Administrator                      |
+| `/notify set channel:<channel>`                | Sets the channel that shows the server status          | Administrator                      |
+| `/notify remove`                               | Stops showing the server status                        | Administrator                      |
 
-- You can change who may use each command under Server Settings → Integrations in Discord.
+- You can change who may use each command under Server Settings → Integrations in Discord, except the permission `/stop` needs for `force`.
 - `/start` and `/stop` together are limited to once a minute per server.
 - A guild (Discord server) can register up to 10 servers.
 
